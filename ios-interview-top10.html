@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Senior iOS Field Manual — 10 Topics That Decide the Interview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f3ede1;
+  --paper-2:#ebe3d3;
+  --ink:#1c1915;
+  --ink-soft:#4a443b;
+  --rule:#cfc4ae;
+  --swift:#e8492f;
+  --swift-deep:#b8321c;
+  --moss:#3f5a3a;
+  --code-bg:#1d1a17;
+  --code-ink:#ece4d6;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --serif:"Newsreader", Georgia, serif;
+  --display:"Fraunces", Georgia, serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:19px;line-height:1.62;
+  font-optical-sizing:auto;
+  -webkit-font-smoothing:antialiased;
+}
+/* paper grain */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.35;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.28 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--swift);width:0;z-index:200;transition:width .08s linear}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;min-height:92vh;padding:7vh 6vw 6vh;
+  display:grid;grid-template-columns:1.25fr .75fr;gap:4vw;align-items:end;
+  border-bottom:1px solid var(--ink);overflow:hidden;
+}
+.hero .kicker{
+  font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);
+  display:flex;gap:18px;align-items:center;
+}
+.hero .kicker::before{content:"";width:46px;height:1px;background:var(--ink)}
+.hero h1{
+  font-family:var(--display);font-weight:300;font-variation-settings:"opsz" 144, "SOFT" 30;
+  font-size:clamp(56px,9.2vw,168px);line-height:.86;letter-spacing:-.035em;margin:.25em 0 .2em;
+}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--swift)}
+.hero h1 .thin{font-weight:200}
+.hero .lede{max-width:34em;font-size:21px;color:var(--ink-soft)}
+.hero .giant{
+  position:absolute;right:-3vw;top:-6vh;font-family:var(--display);font-weight:900;
+  font-size:min(62vw,880px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px var(--rule);
+  letter-spacing:-.06em;pointer-events:none;user-select:none;z-index:0;
+}
+.hero > *{position:relative;z-index:1}
+.hero .meta{
+  font-family:var(--mono);font-size:12.5px;line-height:1.9;border-top:1px solid var(--ink);padding-top:16px;
+}
+.hero .meta b{font-weight:600;color:var(--swift-deep)}
+.hero .meta div{display:flex;justify-content:space-between;border-bottom:1px dotted var(--rule)}
+.reveal{opacity:0;transform:translateY(24px);animation:rise .9s cubic-bezier(.2,.7,.1,1) forwards}
+.d1{animation-delay:.05s}.d2{animation-delay:.2s}.d3{animation-delay:.38s}.d4{animation-delay:.55s}.d5{animation-delay:.75s}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* ---------- LAYOUT ---------- */
+.shell{display:grid;grid-template-columns:290px minmax(0,1fr);gap:0}
+nav.toc{
+  position:sticky;top:0;align-self:start;height:100vh;overflow:auto;
+  border-right:1px solid var(--ink);padding:36px 26px 40px;background:var(--paper);
+}
+nav.toc h4{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin:0 0 18px;color:var(--ink-soft)}
+nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+nav.toc li a{
+  display:grid;grid-template-columns:34px 1fr;gap:6px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule);color:var(--ink);text-decoration:none;
+  font-family:var(--display);font-size:16.5px;line-height:1.25;transition:color .2s, padding .25s;
+}
+nav.toc li a span{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+nav.toc li a:hover{color:var(--swift);padding-left:6px}
+nav.toc li a.active{color:var(--swift-deep);padding-left:6px}
+nav.toc li a.active span{color:var(--swift)}
+nav.toc .foot{margin-top:28px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);line-height:1.7}
+
+main{padding:0 6vw 120px;min-width:0}
+.intro{max-width:46em;padding:72px 0 30px;border-bottom:1px solid var(--rule)}
+.intro p:first-child::first-letter{
+  font-family:var(--display);font-weight:700;float:left;font-size:5.2em;line-height:.78;padding:.06em .1em 0 0;color:var(--swift);
+}
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink);margin:30px 0 0}
+.howto div{padding:16px 18px;border-right:1px solid var(--ink);font-size:16px}
+.howto div:last-child{border-right:0}
+.howto b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--swift-deep);margin-bottom:4px}
+
+/* ---------- TOPIC ---------- */
+section.topic{padding:96px 0 40px;border-bottom:1px solid var(--ink);position:relative}
+.topic-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:end;margin-bottom:34px}
+.num{
+  font-family:var(--display);font-weight:800;font-size:150px;line-height:.75;letter-spacing:-.06em;
+  color:var(--swift);font-variation-settings:"opsz" 144;
+}
+.topic-head .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.topic-head h2{
+  font-family:var(--display);font-weight:400;font-size:clamp(34px,4.4vw,60px);line-height:1;letter-spacing:-.025em;margin:.15em 0 0;
+}
+.topic-head h2 i{color:var(--swift-deep)}
+.why{
+  display:grid;grid-template-columns:150px 1fr;gap:20px;
+  background:var(--ink);color:var(--paper);padding:20px 24px;margin:0 0 34px;max-width:52em;
+  box-shadow:8px 8px 0 var(--swift);
+}
+.why b{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#f6a08f}
+.why p{margin:0;font-size:17.5px}
+.body{max-width:46em}
+.body h3{
+  font-family:var(--display);font-weight:600;font-size:25px;letter-spacing:-.01em;margin:46px 0 10px;
+  display:flex;gap:12px;align-items:baseline;
+}
+.body h3::before{content:"§";color:var(--swift);font-weight:400}
+.body p{margin:0 0 1em}
+.body ul{padding-left:1.1em;margin:0 0 1.1em}
+.body li{margin:.3em 0}
+.body li::marker{color:var(--swift)}
+code{font-family:var(--mono);font-size:.8em;background:var(--paper-2);padding:.08em .35em;border-radius:3px;border:1px solid var(--rule)}
+.body a{color:var(--swift-deep)}
+
+/* tables */
+table{border-collapse:collapse;width:100%;margin:12px 0 24px;font-size:16px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;border-bottom:1.5px solid var(--ink);font-weight:600}
+td:first-child{font-family:var(--mono);font-size:13.5px;white-space:nowrap;color:var(--swift-deep)}
+
+/* code */
+figure.code{margin:22px 0 28px;max-width:52em;background:var(--code-bg);color:var(--code-ink);border-radius:2px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(0,0,0,.2), 0 24px 40px -28px rgba(40,20,0,.6)}
+figure.code figcaption{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:#a89c88;padding:9px 16px;border-bottom:1px solid #35302a;
+}
+figure.code figcaption .dots{display:flex;gap:6px}
+figure.code figcaption .dots i{width:9px;height:9px;border-radius:50%;background:#4a433a;display:block}
+figure.code figcaption .dots i:first-child{background:var(--swift)}
+figure.code button{
+  font-family:var(--mono);font-size:11px;background:transparent;color:#a89c88;border:1px solid #4a433a;padding:3px 9px;cursor:pointer;border-radius:2px;
+}
+figure.code button:hover{color:#fff;border-color:var(--swift)}
+figure.code pre{margin:0;padding:18px 20px 20px;overflow:auto;font-family:var(--mono);font-size:13.6px;line-height:1.65;tab-size:4}
+figure.code pre code{background:none;border:0;padding:0;border-radius:0;font-size:inherit;color:inherit}
+.k{color:#ff8a6b}.s{color:#c7d98f}.c{color:#7d7365;font-style:italic}.a{color:#f2c46d}.t{color:#8fc7e0}.n{color:#d9a3ff}.p{color:#f2c46d}
+
+/* callouts */
+.callout{border-left:4px solid var(--swift);background:linear-gradient(90deg,rgba(232,73,47,.08),transparent 70%);padding:14px 20px;margin:20px 0 26px;max-width:52em;font-size:17.5px}
+.callout.good{border-color:var(--moss);background:linear-gradient(90deg,rgba(63,90,58,.1),transparent 70%)}
+.callout b.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;display:block;margin-bottom:4px;color:var(--swift-deep)}
+.callout.good b.lbl{color:var(--moss)}
+
+/* Q&A */
+.qa{max-width:52em;margin:36px 0 10px;border-top:2px solid var(--ink)}
+.qa > h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;margin:12px 0 4px;color:var(--ink-soft)}
+details{border-bottom:1px solid var(--rule)}
+summary{
+  list-style:none;cursor:pointer;padding:15px 40px 15px 0;position:relative;
+  font-family:var(--display);font-size:20px;font-weight:500;line-height:1.3;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{
+  content:"+";position:absolute;right:4px;top:10px;font-family:var(--display);font-size:30px;font-weight:300;color:var(--swift);transition:transform .3s;
+}
+details[open] summary::after{transform:rotate(45deg)}
+summary:hover{color:var(--swift-deep)}
+details .ans{padding:0 0 18px 0;font-size:17.5px;color:var(--ink-soft);animation:rise .4s ease forwards}
+details .ans p{margin:0 0 .7em}
+
+/* bonus grid */
+.bonus{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border-top:1px solid var(--ink);border-left:1px solid var(--ink);margin-top:30px}
+.bonus div{border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:20px 22px;font-size:16.5px;transition:background .25s}
+.bonus div:hover{background:var(--paper-2)}
+.bonus h5{font-family:var(--display);font-size:21px;font-weight:600;margin:0 0 6px}
+.bonus h5 span{font-family:var(--mono);font-size:11px;color:var(--swift);margin-right:8px}
+
+footer{padding:60px 6vw 80px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);border-top:1px solid var(--ink);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+.in{opacity:0;transform:translateY(30px);transition:opacity .8s ease, transform .8s cubic-bezier(.2,.7,.1,1)}
+.in.on{opacity:1;transform:none}
+
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr}
+  nav.toc{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--ink)}
+  .hero{grid-template-columns:1fr}
+  .num{font-size:96px}
+  .why{grid-template-columns:1fr}
+  .howto{grid-template-columns:1fr}.howto div{border-right:0;border-bottom:1px solid var(--ink)}
+}
+@media print{
+  nav.toc,#progress,body::before,.hero .giant{display:none}
+  .shell{display:block}.in{opacity:1;transform:none}
+  details{open:true}
+}
+@media (prefers-reduced-motion:reduce){
+  .reveal,.in{animation:none;opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="hero">
+  <div class="giant" aria-hidden="true">10</div>
+  <div>
+    <div class="kicker reveal d1">Field Manual · Senior iOS / SwiftUI · Swift 6 era</div>
+    <h1 class="reveal d2"><span class="thin">The ten</span><br><em>topics</em> that<br>decide the room.</h1>
+    <p class="lede reveal d3">A dense, opinionated study guide for an engineer with a decade of iOS behind them. Not "what is a struct" — but the things senior interviewers actually probe: how SwiftUI decides what to redraw, where isolation boundaries sit, why a view model leaks, and how you'd defend an architecture in front of a staff engineer.</p>
+  </div>
+  <div class="meta reveal d4">
+    <div><span>Audience</span><b>Senior / Staff</b></div>
+    <div><span>Language</span><b>Swift 6.x</b></div>
+    <div><span>Platform</span><b>iOS 17 – 26</b></div>
+    <div><span>Format</span><b>Concept → Code → Q&amp;A</b></div>
+    <div><span>Reading time</span><b>≈ 75 min</b></div>
+  </div>
+</header>
+
+<div class="shell">
+<nav class="toc" aria-label="Contents">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#t1"><span>01</span>View Identity &amp; Lifetime</a></li>
+    <li><a href="#t2"><span>02</span>State &amp; Data Flow</a></li>
+    <li><a href="#t3"><span>03</span>Swift Concurrency</a></li>
+    <li><a href="#t4"><span>04</span>Memory &amp; ARC</a></li>
+    <li><a href="#t5"><span>05</span>Value Types, Protocols &amp; Generics</a></li>
+    <li><a href="#t6"><span>06</span>App Architecture</a></li>
+    <li><a href="#t7"><span>07</span>Navigation</a></li>
+    <li><a href="#t8"><span>08</span>Performance</a></li>
+    <li><a href="#t9"><span>09</span>Layout &amp; Animation</a></li>
+    <li><a href="#t10"><span>10</span>Testing</a></li>
+    <li><a href="#bonus"><span>++</span>Rapid-fire Extras</a></li>
+  </ol>
+  <div class="foot">Tip: press <code>/</code> to jump back to contents.<br>Click any question to reveal a model answer.</div>
+</nav>
+
+<main>
+<div class="intro">
+  <p>Ten years in, nobody will grill you on syntax. Senior iOS loops are built to find out whether you understand the <em>machinery</em> — the runtime model behind SwiftUI, the compiler's concurrency guarantees, the cost of an abstraction — and whether you can make and defend trade-offs. Each chapter below follows the same rhythm: why it's asked, the mental model, the code you should be able to write on a whiteboard, the traps, and the questions you're likely to get with answers phrased the way a senior engineer would say them.</p>
+  <p>Practice answering out loud. A strong answer has three layers: <strong>what</strong> it is, <strong>how</strong> it works underneath, and <strong>when</strong> you'd choose something else.</p>
+  <div class="howto">
+    <div><b>Layer 1 · What</b>Precise definition in one or two sentences. No hedging.</div>
+    <div><b>Layer 2 · How</b>The mechanism: memory, identity, isolation, invalidation.</div>
+    <div><b>Layer 3 · When</b>Trade-offs, alternatives, a real story from your past projects.</div>
+  </div>
+</div>
+
+<!-- =============== 1 =============== -->
+<section class="topic" id="t1">
+  <div class="topic-head in">
+    <div class="num">01</div>
+    <div><div class="tag">SwiftUI internals</div><h2>View identity, lifetime &amp; <i>dependencies</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>This is the single most revealing SwiftUI topic. Bugs like "my state resets", "the animation doesn't run", or "the whole list re-renders" all trace back to identity. If you can explain it, you clearly understand the framework rather than just using it.</p></div>
+  <div class="body">
+    <h3>Views are descriptions, not objects</h3>
+    <p>A SwiftUI <code>View</code> is a lightweight value — a recipe. SwiftUI calls <code>body</code>, builds a tree of these values, and diffs it against the previous one to update a persistent <em>attribute graph</em> that owns the real render objects and state storage. Your struct may be created and thrown away hundreds of times; that is cheap and expected. What must be stable is its <strong>identity</strong>, because identity is what state, lifetime, and transitions attach to.</p>
+    <p>There are three ideas to keep apart:</p>
+    <ul>
+      <li><strong>Identity</strong> — how SwiftUI knows two values across updates are "the same view".</li>
+      <li><strong>Lifetime</strong> — the span during which a given identity exists. <code>@State</code> lives exactly as long as the identity. <code>onAppear</code>/<code>onDisappear</code> and <code>.task</code> are tied to it.</li>
+      <li><strong>Dependencies</strong> — the inputs (properties, state, environment, observed objects) whose change causes <code>body</code> to be re-evaluated.</li>
+    </ul>
+
+    <h3>Structural vs explicit identity</h3>
+    <p><strong>Structural identity</strong> is the view's position in the type hierarchy. An <code>if/else</code> inside a <code>@ViewBuilder</code> produces a <code>_ConditionalContent&lt;A, B&gt;</code>: the two branches are <em>different views</em> with different identities. Flip the condition and SwiftUI tears one down (state lost, transition out) and creates the other.</p>
+    <p><strong>Explicit identity</strong> comes from <code>ForEach</code> IDs (<code>Identifiable</code> or <code>id:</code> key path) and from <code>.id(_:)</code>. Changing a value passed to <code>.id()</code> means "this is a brand-new view" — a sharp tool for resetting state, a footgun when done accidentally.</p>
+    <script type="text/x-swift" data-title="Branching kills identity — prefer modifiers">
+// ❌ Two identities. Toggling `isHighlighted` destroys and recreates the view:
+//    internal @State resets, and you get a fade transition instead of an animation.
+if isHighlighted {
+    CardView(item: item).background(.yellow)
+} else {
+    CardView(item: item)
+}
+
+// ✅ One identity. Only an attribute changes, so it animates smoothly
+//    and CardView keeps its state.
+CardView(item: item)
+    .background(isHighlighted ? Color.yellow : Color.clear)
+
+// The same trap, hidden inside a "helpful" extension:
+extension View {
+    @ViewBuilder
+    func `if`<T: View>(_ condition: Bool, transform: (Self) -> T) -> some View {
+        if condition { transform(self) } else { self }   // ⚠️ _ConditionalContent
+    }
+}
+    </script>
+
+    <h3>Stable IDs in lists</h3>
+    <script type="text/x-swift" data-title="ForEach identity">
+// ❌ Index as identity: insert at the top and every row "becomes" a different item.
+//    Row state moves to the wrong data; animations are wrong.
+ForEach(items.indices, id: \.self) { i in Row(item: items[i]) }
+
+// ❌ A fresh UUID per render: every update creates new identities => full rebuild.
+struct Item: Identifiable { let id = UUID(); var title: String }  // fine only if stored once
+
+// ✅ Stable, model-derived identity
+ForEach(items) { item in Row(item: item) }          // item.id from the backend / DB
+
+// Intentional reset: new identity whenever the user changes
+ProfileEditor(user: user)
+    .id(user.id)
+    </script>
+
+    <h3>AnyView and type erasure</h3>
+    <p><code>AnyView</code> hides the static type, so SwiftUI loses structural information and must compare dynamically; if the wrapped type changes, the subtree is replaced. Prefer <code>@ViewBuilder</code>, <code>some View</code>, or a <code>Group</code>/<code>switch</code>, which preserve types. AnyView is acceptable at true dynamic boundaries (plugin-style screens), not in rows of a list.</p>
+
+    <h3>What triggers <code>body</code></h3>
+    <p>SwiftUI re-evaluates <code>body</code> when a dependency changes: a stored property passed from the parent differs, a <code>@State</code>/<code>@Binding</code> changes, an environment value it reads changes, or — with <code>@Observable</code> — a property it <em>actually read</em> during the last <code>body</code> call changes. Re-evaluating <code>body</code> is not the same as re-rendering pixels; SwiftUI still diffs the result. The debug helper <code>Self._printChanges()</code> inside <code>body</code> prints which dependency caused the update.</p>
+    <div class="callout"><b class="lbl">Trap</b>Doing work in a view's <code>init</code> (network calls, creating view models with side effects) runs every time the parent's body runs. Initializers must be cheap and pure; do side effects in <code>.task</code>, which is tied to lifetime and cancelled automatically.</div>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>Why does my @State reset when the parent updates?</summary><div class="ans"><p>Because the view's identity changed. Usual causes: it's in a different branch of an <code>if</code>, it's inside a <code>ForEach</code> with unstable IDs, someone applied <code>.id()</code> with a changing value, or it's wrapped in an <code>AnyView</code> whose underlying type changed. <code>@State</code> storage is owned by the attribute graph and keyed on identity, not the struct instance — the struct is recreated all the time and that's harmless.</p></div></details>
+    <details><summary>What's the difference between onAppear and task?</summary><div class="ans"><p><code>.task</code> starts an async task when the view's identity appears and <strong>cancels it automatically</strong> when it disappears. <code>.task(id:)</code> additionally cancels and restarts when the id value changes — ideal for "reload when the selected item changes". <code>onAppear</code> is synchronous and gives you no cancellation, so you must manage any Task yourself. Note that both may fire more than once (e.g. in tab views or navigation), so loading should be idempotent.</p></div></details>
+    <details><summary>When would you deliberately use .id()?</summary><div class="ans"><p>To reset all local state of a subtree when its "subject" changes — e.g. a form editing a different user, or resetting a <code>ScrollView</code> position. I'd document it, because it also discards transitions and in-flight tasks, and it's expensive for large subtrees.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 2 =============== -->
+<section class="topic" id="t2">
+  <div class="topic-head in">
+    <div class="num">02</div>
+    <div><div class="tag">Data flow</div><h2>State management &amp; the <i>Observation</i> framework</h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>Every screen depends on it, and the toolset changed significantly with iOS 17's <code>@Observable</code>. Interviewers want to see that you know which property wrapper owns data versus which merely references it, and that you've migrated off <code>ObservableObject</code> thoughtfully.</p></div>
+  <div class="body">
+    <h3>Ownership is the organising question</h3>
+    <table>
+      <tr><th>Tool</th><th>Owns?</th><th>Use for</th></tr>
+      <tr><td>@State</td><td>Yes</td><td>Local value state, <em>and</em> (iOS 17+) owning an <code>@Observable</code> model instance.</td></tr>
+      <tr><td>@Binding</td><td>No</td><td>Two-way reference to someone else's value state.</td></tr>
+      <tr><td>@Bindable</td><td>No</td><td>Create bindings (<code>$model.name</code>) into an <code>@Observable</code> object you were handed.</td></tr>
+      <tr><td>@Environment</td><td>No</td><td>Dependencies injected down the tree: system values or your own <code>@Observable</code> types.</td></tr>
+      <tr><td>let / var</td><td>No</td><td>Plain inputs. An <code>@Observable</code> passed as a plain <code>let</code> is still tracked!</td></tr>
+      <tr><td>@StateObject</td><td>Yes</td><td>Legacy: owning an <code>ObservableObject</code> (pre-iOS 17).</td></tr>
+      <tr><td>@ObservedObject</td><td>No</td><td>Legacy: referencing an <code>ObservableObject</code> owned elsewhere.</td></tr>
+    </table>
+
+    <h3>How @Observable differs from ObservableObject</h3>
+    <p><code>ObservableObject</code> exposes a single <code>objectWillChange</code> publisher. Any <code>@Published</code> change invalidates <em>every</em> view observing the object, even if that view never reads the changed property. The <code>@Observable</code> macro instead rewrites stored properties to go through an <code>ObservationRegistrar</code>; SwiftUI records which properties each <code>body</code> <strong>read</strong> (via <code>withObservationTracking</code>) and only invalidates views that read the changed property. Result: finer-grained updates, no <code>@Published</code> boilerplate, and it works on nested/optional/collections of observable objects.</p>
+    <script type="text/x-swift" data-title="Modern data flow (iOS 17+)">
+import Observation
+
+@Observable
+final class CartModel {
+    var items: [Item] = []
+    var promoCode = ""
+    @ObservationIgnored var analytics: Analytics?    // not tracked
+
+    var total: Decimal { items.reduce(0) { $0 + $1.price } } // computed props are tracked through their inputs
+}
+
+struct CartScreen: View {
+    @State private var cart = CartModel()      // owner: survives body re-evaluation
+
+    var body: some View {
+        VStack {
+            CartList(cart: cart)               // plain reference; still tracked
+            PromoField(cart: cart)
+            TotalLabel()
+        }
+        .environment(cart)                     // or inject for deep trees
+    }
+}
+
+struct PromoField: View {
+    @Bindable var cart: CartModel              // needed only to produce $bindings
+    var body: some View { TextField("Promo", text: $cart.promoCode) }
+}
+
+struct TotalLabel: View {
+    @Environment(CartModel.self) private var cart
+    // Re-evaluates when `items` changes, NOT when `promoCode` changes.
+    var body: some View { Text(cart.total, format: .currency(code: "SEK")) }
+}
+    </script>
+
+    <h3>The @State + reference type subtlety</h3>
+    <p>With <code>@StateObject</code> the autoclosure ensured the object was created once. With <code>@State private var model = Model()</code>, the initializer expression is evaluated <em>every time the struct is initialised</em>, though SwiftUI keeps only the first instance. If <code>Model.init</code> is expensive or has side effects, that is wasted work. Options: keep inits trivial, create the model lazily in <code>.task</code>, or inject it from the parent.</p>
+
+    <h3>Single source of truth</h3>
+    <p>Every piece of data should have exactly one owner; everything else derives or references. Copying a value into local <code>@State</code> in <code>init</code> (<code>_text = State(initialValue: model.text)</code>) creates a second truth that silently stops syncing — a classic senior-level code-review catch.</p>
+    <div class="callout good"><b class="lbl">Senior signal</b>Mention that Observation is not SwiftUI-specific: <code>withObservationTracking</code> and (Swift 6.2) the <code>Observations</code> async sequence let UIKit code or services observe the same models, which makes gradual migration from Combine practical.</div>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>@StateObject vs @ObservedObject — what goes wrong if you mix them up?</summary><div class="ans"><p>If a view <em>creates</em> an object with <code>@ObservedObject var vm = VM()</code>, a new instance is created every time the parent re-renders the view, wiping state and potentially restarting network calls. The view that creates it must use <code>@StateObject</code> (or <code>@State</code> with <code>@Observable</code>); children that receive it use <code>@ObservedObject</code> (or a plain property).</p></div></details>
+    <details><summary>How would you migrate a large app from ObservableObject to @Observable?</summary><div class="ans"><p>Bottom-up and per feature: convert a model, replace <code>@Published</code> with plain vars, <code>@StateObject</code> → <code>@State</code>, <code>@ObservedObject</code> → plain property or <code>@Bindable</code>, <code>@EnvironmentObject</code> → <code>@Environment(Type.self)</code>. Watch for Combine pipelines relying on <code>$property</code> publishers — replace with <code>Observations</code>/async or <code>didSet</code>. Gate on the deployment target (iOS 17). Verify with <code>_printChanges</code> that update counts drop.</p></div></details>
+    <details><summary>Why is a struct-based view model sometimes a bad idea?</summary><div class="ans"><p>View models usually need identity and shared mutable state across async work — a struct copied into closures and tasks would diverge. Value types are great for the <em>state</em> (a <code>struct ViewState</code>), held by a reference-typed owner.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 3 =============== -->
+<section class="topic" id="t3">
+  <div class="topic-head in">
+    <div class="num">03</div>
+    <div><div class="tag">Language</div><h2>Swift Concurrency &amp; <i>data-race safety</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>Swift 6 made data races compile-time errors. Teams are mid-migration and need people who can reason about isolation, <code>Sendable</code>, and actor reentrancy — not just sprinkle <code>@MainActor</code> and <code>@unchecked Sendable</code> until it compiles.</p></div>
+  <div class="body">
+    <h3>The building blocks</h3>
+    <ul>
+      <li><strong>async/await</strong> — suspension points are explicit (<code>await</code>). A suspended function frees its thread; it may resume on a different one.</li>
+      <li><strong>Structured concurrency</strong> — <code>async let</code> and <code>TaskGroup</code> create child tasks bound to the parent's scope: they're awaited, cancelled with the parent, and errors propagate.</li>
+      <li><strong>Unstructured tasks</strong> — <code>Task { }</code> inherits actor isolation and priority; <code>Task.detached</code> inherits nothing. Both must be managed (stored, cancelled) manually.</li>
+      <li><strong>Actors</strong> — reference types that serialise access to their mutable state. Calls from outside are <code>await</code>ed.</li>
+      <li><strong>Global actors</strong> — <code>@MainActor</code> isolates code to the main thread.</li>
+      <li><strong>Sendable</strong> — a type is safe to share across isolation domains (value types of Sendable members, immutable final classes, actors).</li>
+    </ul>
+    <script type="text/x-swift" data-title="Structured concurrency in practice">
+struct DashboardLoader {
+    let api: APIClient
+
+    // Parallel, structured: if one throws, the other is cancelled.
+    func load() async throws -> Dashboard {
+        async let profile = api.profile()
+        async let feed = api.feed()
+        return try await Dashboard(profile: profile, feed: feed)
+    }
+
+    // Dynamic fan-out with bounded results
+    func thumbnails(for ids: [Photo.ID]) async throws -> [Photo.ID: Image] {
+        try await withThrowingTaskGroup(of: (Photo.ID, Image).self) { group in
+            for id in ids {
+                group.addTask { (id, try await api.thumbnail(id)) }
+            }
+            var result: [Photo.ID: Image] = [:]
+            for try await (id, image) in group { result[id] = image }
+            return result
+        }
+    }
+}
+    </script>
+
+    <h3>Actor reentrancy — the senior question</h3>
+    <p>Actors are <em>reentrant</em>: while an actor method is suspended at an <code>await</code>, other calls can run on that actor. State you checked before the await may be stale after it. That prevents deadlocks but creates logical races.</p>
+    <script type="text/x-swift" data-title="Reentrancy bug and fix: de-duplicate in-flight work">
+actor ImageCache {
+    private var cache: [URL: Image] = [:]
+    private var inFlight: [URL: Task<Image, Error>] = [:]
+
+    func image(for url: URL) async throws -> Image {
+        if let cached = cache[url] { return cached }
+        if let running = inFlight[url] { return try await running.value }  // join existing work
+
+        let task = Task { try await download(url) }
+        inFlight[url] = task                     // record BEFORE suspending
+        defer { inFlight[url] = nil }
+
+        let image = try await task.value         // ← suspension: other callers may enter here
+        cache[url] = image                       // re-check assumptions after every await
+        return image
+    }
+}
+    </script>
+
+    <h3>Isolation in SwiftUI apps</h3>
+    <p><code>View</code> is <code>@MainActor</code>-isolated, so <code>body</code> and your view's methods run on the main actor. View models that drive UI should be <code>@MainActor</code>. In Swift 6.2 "approachable concurrency", new app targets can opt into <strong>default main-actor isolation</strong>, and <code>nonisolated async</code> functions run on the caller's actor by default (<code>nonisolated(nonsending)</code>); use <code>@concurrent</code> to explicitly move work off the actor. Know these settings exist and what they change — it shows you track the language.</p>
+    <script type="text/x-swift" data-title="A main-actor view model with cancellation">
+@MainActor
+@Observable
+final class SearchModel {
+    var query = "" { didSet { scheduleSearch() } }
+    private(set) var results: [Hit] = []
+    private var searchTask: Task<Void, Never>?
+    private let service: SearchService
+
+    init(service: SearchService) { self.service = service }
+
+    private func scheduleSearch() {
+        searchTask?.cancel()                         // cooperative cancellation
+        searchTask = Task { [query] in
+            try? await Task.sleep(for: .milliseconds(300))   // debounce
+            guard !Task.isCancelled else { return }
+            let hits = (try? await service.search(query)) ?? []
+            guard !Task.isCancelled else { return }
+            results = hits                           // safely on the main actor
+        }
+    }
+}
+    </script>
+    <div class="callout"><b class="lbl">Traps</b>Cancellation is cooperative — a cancelled task keeps running until it checks <code>Task.isCancelled</code> / <code>try Task.checkCancellation()</code> or hits a cancellation-aware API. <code>@unchecked Sendable</code> and <code>nonisolated(unsafe)</code> silence the compiler; each use needs a justification (e.g. a lock-protected class) in a code review. Never block inside an actor with semaphores waiting on async work — the cooperative pool has a limited number of threads and can deadlock.</div>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>Task vs Task.detached?</summary><div class="ans"><p><code>Task {}</code> inherits the current actor isolation, priority, and task-local values. Called from a <code>@MainActor</code> method, its body runs on the main actor (except across awaits to other isolations). <code>Task.detached</code> inherits nothing and should be rare — typically for genuinely independent background work. In modern Swift, prefer making the callee <code>@concurrent</code> or nonisolated rather than detaching.</p></div></details>
+    <details><summary>Is an actor the same as a serial DispatchQueue?</summary><div class="ans"><p>Similar mutual exclusion, but differences matter: actors are reentrant at suspension points (a queue running a block is not), access is checked by the compiler, and actors run on the cooperative thread pool without blocking threads. A serial queue with <code>sync</code> can deadlock; an actor can't, but can suffer interleaving bugs.</p></div></details>
+    <details><summary>How do you bridge a callback API to async/await?</summary><div class="ans"><p><code>withCheckedThrowingContinuation</code>, resuming exactly once (the "checked" variant traps on misuse in debug). For multi-value sources (delegates, notifications), wrap in <code>AsyncStream</code> with <code>AsyncStream.makeStream()</code>, configure a buffering policy, and use <code>onTermination</code> to tear down the underlying observer.</p></div></details>
+    <details><summary>How did you approach the Swift 6 migration?</summary><div class="ans"><p>Module by module: enable complete concurrency checking as warnings, fix leaf modules first (models → Sendable), mark UI layers <code>@MainActor</code>, convert shared mutable singletons to actors or lock-protected types (<code>Mutex</code> from the Synchronization module), use <code>@preconcurrency import</code> for unannotated SDKs, and only then flip to the Swift 6 language mode. Track the count of warnings as a migration metric.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 4 =============== -->
+<section class="topic" id="t4">
+  <div class="topic-head in">
+    <div class="num">04</div>
+    <div><div class="tag">Runtime</div><h2>Memory management &amp; <i>ARC</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>Leaks and crashes from retain cycles remain among the most common production issues. Seniors are expected to spot cycles in code review, explain <code>weak</code> vs <code>unowned</code> precisely, and debug with the Memory Graph and Instruments.</p></div>
+  <div class="body">
+    <h3>How ARC works</h3>
+    <p>Automatic Reference Counting inserts retain/release calls at compile time. Each class instance carries a strong count (plus unowned and weak counts in a side table). When the strong count hits zero, <code>deinit</code> runs and the object is destroyed. ARC is deterministic — no GC pauses — but it cannot break cycles: two objects that strongly reference each other never reach zero.</p>
+    <table>
+      <tr><th>Reference</th><th>Retains?</th><th>Behaviour when target dies</th></tr>
+      <tr><td>strong</td><td>Yes</td><td>Keeps it alive.</td></tr>
+      <tr><td>weak</td><td>No</td><td>Becomes <code>nil</code>; must be an optional <code>var</code>.</td></tr>
+      <tr><td>unowned</td><td>No</td><td>Access traps (crash). Use only when lifetime is guaranteed ≥ the reference.</td></tr>
+      <tr><td>unowned(unsafe)</td><td>No</td><td>Undefined behaviour. Practically never.</td></tr>
+    </table>
+
+    <h3>Where cycles hide</h3>
+    <script type="text/x-swift" data-title="Classic cycles and their fixes">
+final class PlayerViewModel {
+    var onFinish: (() -> Void)?
+    private var timer: Timer?
+    private var cancellables = Set<AnyCancellable>()
+
+    func start() {
+        // ❌ self → timer → closure → self   (and RunLoop retains the timer, too)
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            self.tick()
+        }
+
+        // ✅ break the cycle
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            self?.tick()
+        }
+
+        // ❌ self → cancellables → sink closure → self
+        NotificationCenter.default.publisher(for: .playbackEnded)
+            .sink { [weak self] _ in self?.onFinish?() }   // ✅ weak
+            .store(in: &cancellables)
+    }
+
+    deinit { timer?.invalidate() }   // ⚠️ never runs if a cycle exists — repeating timers must be invalidated explicitly
+    func tick() {}
+}
+
+// Delegates: the child holds the parent weakly.
+protocol DownloaderDelegate: AnyObject { func didFinish() }
+final class Downloader { weak var delegate: DownloaderDelegate? }
+    </script>
+
+    <h3>Tasks capture self too</h3>
+    <p>A <code>Task</code> closure strongly captures <code>self</code> for as long as the task runs. That is <em>not</em> a permanent cycle (the task ends), but a long-running loop — e.g. <code>for await</code> over an infinite stream — keeps the object alive forever. Either cancel the task in a lifecycle hook (SwiftUI's <code>.task</code> does this for you) or capture <code>[weak self]</code> and re-bind inside each iteration.</p>
+    <script type="text/x-swift" data-title="Long-lived task without leaking">
+func observeUpdates() {
+    updatesTask = Task { [weak self, stream = service.updates] in
+        for await update in stream {
+            guard let self else { return }    // re-check per element, don't hold strongly across awaits
+            self.apply(update)
+        }
+    }
+}
+deinit { updatesTask?.cancel() }
+    </script>
+
+    <h3>Value types and memory</h3>
+    <p>Structs don't participate in reference counting themselves, but a struct holding class references (including <code>Array</code>'s heap buffer, <code>String</code>, closures) does retain/release when copied. Large structs with many reference fields can generate significant ARC traffic — an advanced performance point.</p>
+    <div class="callout good"><b class="lbl">Tooling to mention</b>Xcode Memory Graph Debugger (purple "!" for leaks), Instruments → Leaks and Allocations (generation marking: "push and pop a screen 10 times, the generation should return to baseline"), <code>MallocStackLogging</code>, and a cheap trick: a <code>deinit</code> print/log in debug builds for view models.</div>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>When is unowned the right choice over weak?</summary><div class="ans"><p>When the referenced object is guaranteed to outlive the reference and you want to avoid optional handling, e.g. a <code>Customer</code> and its <code>CreditCard</code> where the card can't exist without the customer, or <code>lazy var</code> closures that only run while self exists. If there's any doubt — especially with escaping async callbacks — use <code>weak</code>; a crash is worse than an optional.</p></div></details>
+    <details><summary>Do SwiftUI views cause retain cycles?</summary><div class="ans"><p>Views are structs, so capturing <code>self</code> in a view's closures doesn't create a cycle with the view itself. Cycles appear in the reference types behind them: view models storing closures that capture the model, Combine subscriptions stored on the same object, or environment objects that reference each other.</p></div></details>
+    <details><summary>Does [weak self] in every closure solve everything?</summary><div class="ans"><p>No — it's cargo cult if applied blindly. Non-escaping closures (<code>map</code>, <code>forEach</code>, <code>withAnimation</code>) can't cause cycles. And <code>guard let self</code> at the top of a long async closure re-creates a strong reference for the whole remaining duration. Be intentional: weak where an ownership cycle or unwanted lifetime extension is possible.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 5 =============== -->
+<section class="topic" id="t5">
+  <div class="topic-head in">
+    <div class="num">05</div>
+    <div><div class="tag">Language design</div><h2>Value types, protocols &amp; <i>generics</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>Swift's type system is where API design happens. Interviewers check whether you understand copy-on-write, static vs dynamic dispatch, and the real cost difference between <code>some</code> and <code>any</code> — the knowledge that separates a framework author from a framework consumer.</p></div>
+  <div class="body">
+    <h3>Value semantics &amp; copy-on-write</h3>
+    <p>Structs and enums are copied on assignment, which gives local reasoning and thread safety for free. Standard collections (<code>Array</code>, <code>Dictionary</code>, <code>String</code>) store elements in a heap buffer and implement <strong>copy-on-write</strong>: copies share the buffer until one is mutated, at which point <code>isKnownUniquelyReferenced</code> fails and the buffer is duplicated. Your own structs don't get CoW automatically — you implement it when wrapping a class-backed storage.</p>
+    <script type="text/x-swift" data-title="Implementing copy-on-write">
+struct LargeMatrix {
+    private final class Storage { var values: [Double]; init(_ v: [Double]) { values = v } }
+    private var storage: Storage
+
+    init(count: Int) { storage = Storage(Array(repeating: 0, count: count)) }
+
+    subscript(i: Int) -> Double {
+        get { storage.values[i] }
+        set {
+            if !isKnownUniquelyReferenced(&storage) {   // shared? copy first
+                storage = Storage(storage.values)
+            }
+            storage.values[i] = newValue
+        }
+    }
+}
+    </script>
+
+    <h3>Dispatch</h3>
+    <ul>
+      <li><strong>Static</strong> — structs, <code>final</code> classes, methods only in protocol extensions, generic code specialised by the optimiser. Inlinable, fast.</li>
+      <li><strong>V-table</strong> — non-final class methods.</li>
+      <li><strong>Witness table</strong> — protocol requirements called through a generic or existential.</li>
+      <li><strong>Message</strong> — <code>@objc dynamic</code>, needed for KVO/swizzling.</li>
+    </ul>
+    <script type="text/x-swift" data-title="The protocol extension dispatch gotcha">
+protocol Greeter { func greet() -> String }          // requirement: dynamic via witness table
+extension Greeter {
+    func greet() -> String { "Hello" }
+    func farewell() -> String { "Bye" }               // NOT a requirement: statically dispatched
+}
+struct Swede: Greeter {
+    func greet() -> String { "Hej" }
+    func farewell() -> String { "Hej då" }
+}
+let g: any Greeter = Swede()
+g.greet()      // "Hej"   — requirement, dynamic
+g.farewell()   // "Bye"   — extension method, resolved on the static type `any Greeter`
+    </script>
+
+    <h3>some vs any</h3>
+    <p><code>some P</code> is an <strong>opaque type</strong>: one concrete type, fixed at compile time, hidden from the caller. The compiler can specialise and inline. <code>any P</code> is an <strong>existential box</strong>: it can hold different concrete types at runtime, stored in a 3-word inline buffer (or heap-allocated if larger) with a witness table — dynamic dispatch and possible allocation. Since Swift 5.7, <code>some P</code> works in parameter position as sugar for a generic, and primary associated types allow <code>some Collection&lt;Int&gt;</code>.</p>
+    <script type="text/x-swift" data-title="Generics, opaque types, existentials">
+// Generic — caller chooses the type; specialised; fast
+func total<C: Collection<Order>>(_ orders: C) -> Decimal { orders.reduce(0) { $0 + $1.amount } }
+func total(_ orders: some Collection<Order>) -> Decimal { ... }  // identical, lighter syntax
+
+// Opaque return — implementation chooses; caller can't depend on concrete type
+func makeRepository() -> some OrderRepository { RemoteOrderRepository() }
+
+// Existential — required for heterogeneous storage
+let handlers: [any DeepLinkHandler] = [ProductHandler(), CartHandler()]
+
+// `body` is `some View`: one concrete deeply-nested type, which is how SwiftUI diffs structurally.
+    </script>
+    <div class="callout good"><b class="lbl">Rule of thumb</b>Default to <code>some</code>/generics; reach for <code>any</code> when you genuinely need heterogeneity or to cut generic propagation at a module boundary. Also know newer tools: <code>~Copyable</code> non-copyable types for unique ownership, parameter packs (<code>each T</code>) for variadic generics, typed throws (<code>throws(NetworkError)</code>).</div>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>Struct or class for a model — how do you decide?</summary><div class="ans"><p>Struct by default: value semantics, thread-safety, cheap equality, works with SwiftUI diffing. Class when identity matters (a shared, mutable entity that multiple owners observe), when you need inheritance or Objective-C interop, when the model is an <code>@Observable</code> / SwiftData <code>@Model</code>, or when copying would be semantically wrong (a file handle, a connection).</p></div></details>
+    <details><summary>Why can't you use a protocol with associated types as a plain type before Swift 5.7?</summary><div class="ans"><p>The compiler couldn't know the associated type, so it couldn't type-check member usage. Swift 5.7 introduced <code>any P</code> with implicit existential opening and primary associated types (<code>any Collection&lt;Int&gt;</code>), which covers most cases that previously needed manual type erasers like <code>AnyPublisher</code>.</p></div></details>
+    <details><summary>Is a struct always on the stack?</summary><div class="ans"><p>No. Location depends on context: structs stored in a class, captured by an escaping closure, boxed in an existential that exceeds the inline buffer, or with indirect enum cases live on the heap. Value semantics is about behaviour, not location.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 6 =============== -->
+<section class="topic" id="t6">
+  <div class="topic-head in">
+    <div class="num">06</div>
+    <div><div class="tag">System design</div><h2>App architecture &amp; <i>modularisation</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>At senior level there's almost always a mobile system-design round: "Design an offline-capable feed", "How would you structure an app for 30 engineers?" They look for clear boundaries, testability, and trade-off reasoning — not loyalty to one acronym.</p></div>
+  <div class="body">
+    <h3>The patterns, honestly compared</h3>
+    <table>
+      <tr><th>Pattern</th><th>Strength</th><th>Cost</th></tr>
+      <tr><td>MV / "just SwiftUI"</td><td>Least ceremony; @Observable models + environment. Great for small apps.</td><td>Logic drifts into views; harder to unit test.</td></tr>
+      <tr><td>MVVM</td><td>Testable presentation logic; familiar to teams.</td><td>VMs can become god objects; duplication of state.</td></tr>
+      <tr><td>TCA / Redux-like</td><td>Unidirectional flow, exhaustive tests, explicit effects.</td><td>Learning curve, third-party dependency, compile-time cost.</td></tr>
+      <tr><td>Clean / VIPER</td><td>Strong layering for very large teams.</td><td>Boilerplate; fights SwiftUI's data flow.</td></tr>
+    </table>
+    <p>Whatever the presentation pattern, the durable structure is: <strong>UI → feature logic → domain/use cases → data (repositories) → infrastructure (network, persistence)</strong>, with dependencies pointing inward and side effects behind protocols.</p>
+
+    <h3>Dependency injection that stays testable</h3>
+    <script type="text/x-swift" data-title="Protocol-based repository + environment injection">
+protocol OrderRepository: Sendable {
+    func orders() async throws -> [Order]
+}
+
+struct RemoteOrderRepository: OrderRepository {
+    let client: HTTPClient
+    func orders() async throws -> [Order] { try await client.send(.orders) }
+}
+
+@MainActor @Observable
+final class OrdersModel {
+    enum State { case idle, loading, loaded([Order]), failed(String) }
+    private(set) var state: State = .idle
+    private let repo: any OrderRepository
+
+    init(repo: any OrderRepository) { self.repo = repo }   // constructor injection
+
+    func load() async {
+        state = .loading
+        do { state = .loaded(try await repo.orders()) }
+        catch { state = .failed(error.localizedDescription) }
+    }
+}
+
+// Composition root — the only place that knows concrete types
+@main struct ShopApp: App {
+    private let deps = AppDependencies.live
+    var body: some Scene {
+        WindowGroup { OrdersScreen(model: OrdersModel(repo: deps.orders)) }
+    }
+}
+    </script>
+    <p>Using an <code>enum State</code> instead of separate <code>isLoading</code>, <code>error</code>, <code>orders</code> booleans makes impossible states unrepresentable — a point interviewers like.</p>
+
+    <h3>Modularisation with Swift Package Manager</h3>
+    <ul>
+      <li>Split by <strong>feature</strong> (Orders, Checkout, Profile) plus <strong>shared core</strong> modules (DesignSystem, Networking, Analytics). Features never import each other; they communicate via interfaces or a router.</li>
+      <li>Interface/implementation module pairs (<code>OrdersInterface</code>, <code>Orders</code>) keep build graphs shallow and enable demo apps per feature.</li>
+      <li>Benefits: incremental build speed, enforced boundaries (<code>internal</code> by default), ownership per team, faster previews and tests.</li>
+      <li>Cost: more <code>public</code> API surface, Package.swift maintenance, resource bundles, binary size from duplicate static linking if misconfigured.</li>
+    </ul>
+
+    <h3>System-design checklist for mobile</h3>
+    <p>When asked to design a feature end-to-end, walk through: requirements &amp; scale → API contract (pagination cursors, ETags) → data model &amp; persistence (SwiftData/Core Data/GRDB, cache invalidation) → offline &amp; sync conflicts → networking (retry with backoff, idempotency keys) → UI states (empty, loading, error, partial) → observability (logging, metrics, crash reporting) → security (Keychain, ATS, certificate pinning trade-offs) → feature flags &amp; rollout → testing strategy.</p>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>Is MVVM still necessary with SwiftUI?</summary><div class="ans"><p>It's not required — SwiftUI views plus <code>@Observable</code> models are already a kind of MVVM. What matters is that business logic isn't trapped in <code>body</code> and can be tested without the UI. For simple screens I use a model directly; for complex screens with async flows, validation, and multiple dependencies, a dedicated observable screen model pays off. I'd align with the team's existing convention over personal preference.</p></div></details>
+    <details><summary>How would you design an offline-first feed?</summary><div class="ans"><p>Local database is the source of truth; UI observes the DB. A sync engine fetches pages (cursor-based), upserts into the DB, and records a sync token. User mutations are written locally with a pending status and queued in an outbox with idempotency keys; a background processor flushes the queue with exponential backoff and reconciles server responses. Conflicts resolved by server-wins or field-level merge depending on domain. Use BGTaskScheduler for refresh, and expose sync state to the UI.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 7 =============== -->
+<section class="topic" id="t7">
+  <div class="topic-head in">
+    <div class="num">07</div>
+    <div><div class="tag">SwiftUI</div><h2>Navigation as <i>data</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>Navigation is where SwiftUI apps historically broke down. <code>NavigationStack</code> made state-driven navigation workable; interviewers want to see programmatic routing, deep linking, and state restoration handled cleanly.</p></div>
+  <div class="body">
+    <h3>Core model</h3>
+    <p><code>NavigationStack(path:)</code> binds the stack to a collection. Pushing is appending, popping is removing; <code>navigationDestination(for:)</code> maps value types to views. <code>NavigationPath</code> is a type-erased path for heterogeneous values; a typed <code>[Route]</code> enum is often clearer and easier to test. <code>NavigationSplitView</code> handles sidebar/detail layouts on iPad and Mac. Sheets, full-screen covers and alerts are also state: <code>.sheet(item:)</code> driven by an optional.</p>
+    <script type="text/x-swift" data-title="A router with deep-link support">
+enum Route: Hashable, Codable {
+    case product(Product.ID)
+    case reviews(Product.ID)
+    case cart
+}
+
+@MainActor @Observable
+final class Router {
+    var path: [Route] = []
+    var sheet: Sheet?
+    enum Sheet: Identifiable { case login; var id: Self { self } }
+
+    func push(_ r: Route) { path.append(r) }
+    func popToRoot()      { path.removeAll() }
+
+    func handle(_ url: URL) {                        // myshop://product/42/reviews
+        guard let parts = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .path.split(separator: "/") else { return }
+        switch parts.first {
+        case "product"? where parts.count >= 2:
+            let id = Product.ID(parts[1])
+            path = parts.count > 2 && parts[2] == "reviews" ? [.product(id), .reviews(id)] : [.product(id)]
+        case "cart"?: path = [.cart]
+        default: break
+        }
+    }
+}
+
+struct RootView: View {
+    @State private var router = Router()
+    var body: some View {
+        NavigationStack(path: $router.path) {
+            HomeView()
+                .navigationDestination(for: Route.self) { route in
+                    switch route {
+                    case .product(let id): ProductView(id: id)
+                    case .reviews(let id): ReviewsView(productID: id)
+                    case .cart:            CartView()
+                    }
+                }
+        }
+        .sheet(item: $router.sheet) { _ in LoginView() }
+        .environment(router)
+        .onOpenURL { router.handle($0) }
+    }
+}
+    </script>
+    <p>Because <code>Route</code> is <code>Codable</code>, the path can be persisted with <code>@SceneStorage</code> for state restoration (<code>NavigationPath</code> also offers a <code>codable</code> representation).</p>
+    <div class="callout"><b class="lbl">Traps</b>Pass IDs, not large models, in routes — the destination should fetch/observe fresh data. Don't put <code>navigationDestination</code> inside lazy containers (<code>List</code>, <code>LazyVStack</code>) — it may not be registered when needed. Avoid nesting <code>NavigationStack</code>s inside each other; each tab owns one stack.</div>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>How do you handle navigation in a modular app where features can't import each other?</summary><div class="ans"><p>Features expose route types or destination builders through an interface module; the app target (composition root) owns the router and maps routes to feature views. Alternatively, each feature registers a <code>navigationDestination</code> for its own route type on the stack. The key is that only the app shell knows the full graph.</p></div></details>
+    <details><summary>Coordinator pattern in SwiftUI — still relevant?</summary><div class="ans"><p>The idea (centralised flow logic, views don't decide where to go) is still valuable; the UIKit implementation isn't. In SwiftUI a coordinator becomes an observable router owning path and presentation state. In mixed UIKit apps, I'd keep UIKit coordinators and host SwiftUI screens via <code>UIHostingController</code>, passing closures for navigation intents.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 8 =============== -->
+<section class="topic" id="t8">
+  <div class="topic-head in">
+    <div class="num">08</div>
+    <div><div class="tag">Craft</div><h2>Performance &amp; <i>profiling</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>"The list scrolls badly — what do you do?" is a favourite because it tests method, not trivia. Seniors measure first, then fix the actual bottleneck: body invalidation, layout cost, main-thread work, images, or launch time.</p></div>
+  <div class="body">
+    <h3>A diagnostic method</h3>
+    <ol>
+      <li><strong>Reproduce on a real, older device</strong> in a Release build. Simulator and Debug numbers lie.</li>
+      <li><strong>Instruments</strong>: the SwiftUI template (view body counts, update causes, long view bodies), Time Profiler (main-thread hot paths), Hitches/Animation Hitches, Allocations, and App Launch.</li>
+      <li><strong>Narrow the cause</strong> with <code>Self._printChanges()</code>, signposts (<code>OSSignposter</code>) around suspect code.</li>
+      <li><strong>Fix, re-measure, guard</strong> with performance tests (<code>XCTMetric</code>) or MetricKit in production.</li>
+    </ol>
+
+    <h3>SwiftUI-specific levers</h3>
+    <ul>
+      <li><strong>Shrink the invalidation surface</strong>: split big views into smaller ones so a change only re-evaluates the subview that reads it. With <code>@Observable</code>, pass the model down and let each child read only what it needs.</li>
+      <li><strong>Don't do work in body</strong>: no sorting, date formatting, or filtering on every evaluation — precompute in the model.</li>
+      <li><strong>Lazy containers</strong>: <code>LazyVStack</code>/<code>List</code> for long content; stable IDs; avoid <code>GeometryReader</code> in every row.</li>
+      <li><strong>Equatable views</strong>: conforming a view to <code>Equatable</code> lets SwiftUI skip body when inputs are equal (useful when inputs include closures that defeat the default comparison).</li>
+      <li><strong>Avoid broad environment changes</strong>: a frequently changing value high in the tree invalidates every reader.</li>
+      <li><strong>Images</strong>: decode and downsample off the main thread (<code>CGImageSourceCreateThumbnailAtIndex</code>, <code>UIImage.prepareThumbnail</code>); cache.</li>
+      <li><strong>Expensive effects</strong>: blurs, shadows, and masks force offscreen passes; <code>.drawingGroup()</code> flattens complex vector content into a Metal-backed layer.</li>
+    </ul>
+    <script type="text/x-swift" data-title="Narrowing invalidation">
+// ❌ Every keystroke in the search field re-evaluates the entire screen, including the heavy chart.
+struct Screen: View {
+    @State private var query = ""
+    let data: Analytics
+    var body: some View {
+        VStack {
+            TextField("Search", text: $query)
+            HeavyChart(data: data)                 // re-evaluated needlessly? only if its inputs differ —
+            Results(items: data.items.filter { $0.matches(query) })  // but this filter runs on every keystroke
+        }
+    }
+}
+
+// ✅ Isolate the changing state and the derived work
+struct Screen2: View {
+    let data: Analytics
+    var body: some View {
+        VStack {
+            SearchSection(items: data.items)       // owns `query`; invalidates only itself
+            HeavyChart(data: data)
+        }
+    }
+}
+struct SearchSection: View {
+    let items: [Item]
+    @State private var query = ""
+    private var filtered: [Item] { query.isEmpty ? items : items.filter { $0.matches(query) } }
+    var body: some View {
+        TextField("Search", text: $query)
+        LazyVStack { ForEach(filtered) { ResultRow(item: $0) } }
+    }
+}
+    </script>
+
+    <h3>Launch time</h3>
+    <p>Measure with the App Launch instrument and <code>XCTApplicationLaunchMetric</code>. Reduce dynamic frameworks (merge or make static), defer non-critical SDK initialisation until after first frame, avoid heavy work in <code>App.init</code> and static initialisers, and lazily load features. Mention pre-main vs post-main phases.</p>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>The feed stutters while scrolling. Walk me through it.</summary><div class="ans"><p>Reproduce on an older device in Release. Record with Instruments' SwiftUI and Hitches templates. Typical findings: rows re-evaluated because a parent-level state changes (fix by moving state down / splitting views), synchronous image decoding on the main thread (downsample in background, cache), expensive date/number formatters created per row (cache formatters or use <code>FormatStyle</code>), unstable IDs causing row recreation, and heavy shadows (use <code>shadowPath</code>-style shapes or prerendered assets). Verify the hitch ratio improves, then add a regression check.</p></div></details>
+    <details><summary>Does re-evaluating body mean the view is redrawn?</summary><div class="ans"><p>No. Body evaluation produces a new description; SwiftUI diffs it and only updates render state that actually changed. But body evaluation is not free — excessive evaluations of complex bodies show up as main-thread time, so you minimise unnecessary ones.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 9 =============== -->
+<section class="topic" id="t9">
+  <div class="topic-head in">
+    <div class="num">09</div>
+    <div><div class="tag">SwiftUI</div><h2>Layout system &amp; <i>animation</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>Building custom, pixel-perfect UI is daily work. Understanding the proposal-based layout algorithm and the transaction-based animation model is what lets you build without fighting the framework — and explain why <code>GeometryReader</code> "breaks" layouts.</p></div>
+  <div class="body">
+    <h3>The three-step layout dance</h3>
+    <ol>
+      <li><strong>Parent proposes</strong> a size to the child (<code>ProposedViewSize</code>: width/height may be <code>nil</code> = ideal, <code>0</code> = minimum, <code>.infinity</code> = maximum).</li>
+      <li><strong>Child chooses</strong> its own size. The parent must respect it — children always decide.</li>
+      <li><strong>Parent places</strong> the child in its coordinate space, using alignment.</li>
+    </ol>
+    <p>This explains much: <code>Text</code> sizes to fit its content; <code>Color</code> and <code>Shape</code> are greedy and take the whole proposal; <code>.frame(width:)</code> is a new parent view that proposes a fixed size; modifier order matters because each modifier wraps the previous view (<code>.padding().background()</code> ≠ <code>.background().padding()</code>). <code>GeometryReader</code> accepts the full proposal and gives its child the size — it's greedy, which is why it inflates layouts. Prefer <code>containerRelativeFrame</code>, <code>onGeometryChange</code>, <code>ViewThatFits</code>, or a custom <code>Layout</code>.</p>
+    <script type="text/x-swift" data-title="A custom Layout: flow / tag cloud">
+struct FlowLayout: Layout {
+    var spacing: CGFloat = 8
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        rows(for: subviews, maxWidth: proposal.width ?? .infinity)
+            .reduce(CGSize.zero) { acc, row in
+                CGSize(width: max(acc.width, row.width),
+                       height: acc.height + row.height + (acc.height > 0 ? spacing : 0))
+            }
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize,
+                       subviews: Subviews, cache: inout ()) {
+        var y = bounds.minY
+        for row in rows(for: subviews, maxWidth: bounds.width) {
+            var x = bounds.minX
+            for index in row.indices {
+                let size = subviews[index].sizeThatFits(.unspecified)
+                subviews[index].place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
+                x += size.width + spacing
+            }
+            y += row.height + spacing
+        }
+    }
+
+    private struct Row { var indices: [Int] = []; var width: CGFloat = 0; var height: CGFloat = 0 }
+
+    private func rows(for subviews: Subviews, maxWidth: CGFloat) -> [Row] {
+        var rows: [Row] = [Row()]
+        for (i, sub) in subviews.enumerated() {
+            let size = sub.sizeThatFits(.unspecified)
+            let needed = rows[rows.count - 1].width + (rows[rows.count - 1].indices.isEmpty ? 0 : spacing) + size.width
+            if needed > maxWidth, !rows[rows.count - 1].indices.isEmpty { rows.append(Row()) }
+            var row = rows.removeLast()
+            row.width += (row.indices.isEmpty ? 0 : spacing) + size.width
+            row.height = max(row.height, size.height)
+            row.indices.append(i)
+            rows.append(row)
+        }
+        return rows
+    }
+}
+// Usage:  FlowLayout { ForEach(tags) { TagChip($0) } }
+    </script>
+
+    <h3>How animation actually works</h3>
+    <p>Animations in SwiftUI are driven by <strong>state changes inside a transaction</strong>. <code>withAnimation</code> sets an animation on the transaction; <code>.animation(_:value:)</code> attaches one to changes of a specific value in a subtree. SwiftUI then interpolates every <code>Animatable</code> property (via <code>animatableData</code>) between old and new render values. Insertion/removal animate via <strong>transitions</strong>, which depend on identity — which loops back to Topic 01.</p>
+    <script type="text/x-swift" data-title="Explicit, implicit, matched geometry, phase">
+// Explicit: everything affected by this state change animates
+Button("Expand") { withAnimation(.spring(duration: 0.4, bounce: 0.25)) { isExpanded.toggle() } }
+
+// Implicit, scoped to a value (the old .animation(_:) without value is deprecated)
+Circle().scaleEffect(isActive ? 1.2 : 1).animation(.snappy, value: isActive)
+
+// Hero transitions between two views sharing an identity
+@Namespace private var ns
+Thumbnail().matchedGeometryEffect(id: photo.id, in: ns)
+
+// Multi-step and keyframe animations (iOS 17)
+Image(systemName: "bell")
+    .phaseAnimator([0, -15, 15, 0], trigger: notificationCount) { view, angle in
+        view.rotationEffect(.degrees(angle))
+    }
+
+// Disable animation for a specific change
+var t = Transaction(); t.disablesAnimations = true
+withTransaction(t) { selection = newValue }
+    </script>
+    <div class="callout good"><b class="lbl">Senior signal</b>Mention accessibility: honour <code>@Environment(\.accessibilityReduceMotion)</code>, support Dynamic Type by not hard-coding heights, and use <code>ViewThatFits</code> to switch layouts at large text sizes.</div>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>Why does .frame(maxWidth: .infinity) sometimes not fill the width?</summary><div class="ans"><p>The frame proposes up to the parent's proposal — if the parent (e.g. a <code>HStack</code> with other children, or a <code>fixedSize()</code> ancestor) proposes less, the frame can't exceed it. Also alignment: the frame grows but its content stays its own size, aligned centre by default; set the background after the frame to see it.</p></div></details>
+    <details><summary>How do you animate a custom shape or a number?</summary><div class="ans"><p>Implement <code>animatableData</code> (an <code>Animatable</code> property, using <code>AnimatablePair</code> for multiple values) so SwiftUI can interpolate. For numbers in text, use <code>.contentTransition(.numericText(value:))</code>. In iOS 18+, the <code>@Animatable</code> macro reduces boilerplate where available.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== 10 =============== -->
+<section class="topic" id="t10">
+  <div class="topic-head in">
+    <div class="num">10</div>
+    <div><div class="tag">Quality</div><h2>Testing strategy &amp; <i>Swift Testing</i></h2></div>
+  </div>
+  <div class="why in"><b>Why it's asked</b><p>Seniors set quality standards for the team. Expect questions about what to test, how to test async code, how to keep UI tests from flaking, and your familiarity with Apple's newer Swift Testing framework.</p></div>
+  <div class="body">
+    <h3>The pyramid, applied to iOS</h3>
+    <ul>
+      <li><strong>Unit tests (most)</strong> — models, reducers, view models, parsers, repositories with fakes. Fast and deterministic.</li>
+      <li><strong>Integration tests</strong> — real persistence stack in-memory, networking with <code>URLProtocol</code> stubs.</li>
+      <li><strong>Snapshot tests</strong> — visual regressions of SwiftUI views across Dynamic Type, dark mode, locales.</li>
+      <li><strong>UI tests (few)</strong> — critical journeys (login, purchase), with launch arguments to stub the backend and accessibility identifiers for stable queries.</li>
+    </ul>
+
+    <h3>Swift Testing</h3>
+    <p>Introduced with Xcode 16: <code>@Test</code> functions, <code>#expect</code> and <code>#require</code> macros with rich failure output, <code>@Suite</code> types (a fresh instance per test, so <code>init</code> replaces <code>setUp</code>), parameterised tests via <code>arguments:</code>, traits (<code>.tags</code>, <code>.disabled</code>, <code>.timeLimit</code>, <code>.bug</code>), and tests run in parallel by default. It coexists with XCTest; UI and performance tests remain XCTest.</p>
+    <script type="text/x-swift" data-title="Testing an async view model">
+import Testing
+@testable import Shop
+
+struct StubOrders: OrderRepository {
+    var result: Result<[Order], Error>
+    func orders() async throws -> [Order] { try result.get() }
+}
+
+@MainActor
+@Suite("OrdersModel")
+struct OrdersModelTests {
+
+    @Test func loadsOrders() async {
+        let model = OrdersModel(repo: StubOrders(result: .success([.fixture(id: 1)])))
+        await model.load()
+        guard case .loaded(let orders) = model.state else {
+            Issue.record("Expected loaded, got \(model.state)"); return
+        }
+        #expect(orders.map(\.id) == [1])
+    }
+
+    @Test func surfacesErrors() async {
+        let model = OrdersModel(repo: StubOrders(result: .failure(URLError(.notConnectedToInternet))))
+        await model.load()
+        #expect({ if case .failed = model.state { true } else { false } }())
+    }
+
+    @Test("Price formatting", arguments: [
+        (Decimal(0), "0,00 kr"), (Decimal(1234.5), "1 234,50 kr")
+    ])
+    func formatsPrice(amount: Decimal, expected: String) {
+        #expect(PriceFormatter.sek.string(amount).replacing("\u{00A0}", with: " ") == expected)
+    }
+}
+    </script>
+
+    <h3>Making code testable</h3>
+    <ul>
+      <li>Inject dependencies (network, clock, UUID, date, persistence) instead of reaching for singletons. Injecting a <code>Clock</code> makes debounces and timeouts testable without real waiting.</li>
+      <li>Keep logic out of views; test the model that drives them.</li>
+      <li>Async tests: <code>await</code> the operation directly where possible; for callbacks/streams use <code>confirmation()</code> (Swift Testing) or expectations (XCTest). Avoid <code>sleep</code>-based tests.</li>
+      <li>Flaky UI tests: disable animations via launch arguments, wait on element existence (<code>waitForExistence</code>), reset state per run, and never depend on live backends.</li>
+    </ul>
+  </div>
+  <div class="qa">
+    <h4>Likely questions</h4>
+    <details><summary>How do you test SwiftUI views themselves?</summary><div class="ans"><p>Mostly indirectly: views should be thin, so I test the observable models they render. For appearance, snapshot tests (e.g. swift-snapshot-testing) on key states and configurations. For behaviour, a small number of XCUITests on critical flows. Previews with fixture data act as living documentation and a quick manual check.</p></div></details>
+    <details><summary>What's your approach to coverage targets?</summary><div class="ans"><p>Coverage is a signal, not a goal. I prefer guaranteeing coverage of the domain and data layers and regression tests for every fixed bug, rather than a global percentage that incentivises testing getters. Track flakiness and test duration too — a slow, flaky suite gets ignored.</p></div></details>
+  </div>
+</section>
+
+<!-- =============== BONUS =============== -->
+<section class="topic" id="bonus">
+  <div class="topic-head in">
+    <div class="num">++</div>
+    <div><div class="tag">Rapid fire</div><h2>Things you should be able to <i>answer in 60 seconds</i></h2></div>
+  </div>
+  <div class="bonus">
+    <div><h5><span>A</span>UIKit interop</h5><code>UIViewRepresentable</code>: <code>makeUIView</code> once, <code>updateUIView</code> on every state change (must be idempotent), <code>Coordinator</code> for delegates. <code>UIHostingController</code> embeds SwiftUI in UIKit; set <code>sizingOptions = .intrinsicContentSize</code> for self-sizing.</div>
+    <div><h5><span>B</span>SwiftData &amp; Core Data</h5><code>@Model</code> classes, <code>ModelContainer</code>/<code>ModelContext</code>, <code>@Query</code> in views. Contexts aren't Sendable — use <code>@ModelActor</code> for background work and pass <code>PersistentIdentifier</code>s across actors. Know migrations (<code>VersionedSchema</code>).</div>
+    <div><h5><span>C</span>Combine today</h5>Still fine for streams of events with operators (debounce, combineLatest), but new code favours async sequences and Observation. Know <code>AnyCancellable</code> lifetime, <code>receive(on:)</code>, and bridging with <code>.values</code>.</div>
+    <div><h5><span>D</span>App lifecycle</h5><code>App</code>/<code>Scene</code>, <code>@Environment(\.scenePhase)</code>, <code>UIApplicationDelegateAdaptor</code> for push and SDK setup, background tasks with <code>BGTaskScheduler</code> and the <code>.backgroundTask</code> scene modifier.</div>
+    <div><h5><span>E</span>Security</h5>Keychain for secrets (never UserDefaults), Data Protection classes, ATS, certificate pinning trade-offs, Sign in with Apple / passkeys, jailbreak detection limits, privacy manifests and required-reason APIs.</div>
+    <div><h5><span>F</span>Accessibility</h5>Labels/values/hints, traits, <code>accessibilityElement(children: .combine)</code>, Dynamic Type, VoiceOver rotor, sufficient contrast. Senior candidates treat it as a requirement, not polish.</div>
+    <div><h5><span>G</span>Networking</h5><code>URLSession</code> async APIs, typed request/endpoint abstractions, retry with jittered backoff, cancellation, <code>Codable</code> strategies (dates, snake_case), handling 401 refresh with a single in-flight token refresh actor.</div>
+    <div><h5><span>H</span>Modern platform</h5>Widgets &amp; Live Activities (ActivityKit), App Intents for Siri/Shortcuts/Spotlight, the Liquid Glass design language in iOS 26 (<code>glassEffect</code>), Swift macros, and on-device intelligence via the Foundation Models framework.</div>
+    <div><h5><span>I</span>Leadership stories</h5>Prepare STAR stories: a migration you led (UIKit→SwiftUI, Swift 6), a production incident you debugged, a disagreement on architecture, mentoring a junior, and a trade-off you'd make differently now.</div>
+  </div>
+</section>
+</main>
+</div>
+
+<footer>
+  <span>The Senior iOS Field Manual — ten topics, one interview.</span>
+  <span>Compiled 2026 · Swift 6 · iOS 17–26</span>
+</footer>
+
+<script>
+// ---- Tiny Swift highlighter: converts <script type="text/x-swift"> blocks into styled figures ----
+(function(){
+  const KW = new Set(("actor any as associatedtype async await break case catch class continue default defer deinit do else enum extension fallthrough false fileprivate final for func get guard if import in init inout internal is lazy let mutating nil nonisolated open operator override private protocol public repeat rethrows return self Self set some static struct subscript super switch throw throws true try typealias unowned var weak where while willSet didSet consuming borrowing sending").split(" "));
+  const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const re = /(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|(@[A-Za-z_]\w*)|(#[A-Za-z_]\w*)|\b([A-Za-z_]\w*)\b|\b(\d[\d_.]*)\b/g;
+  function hl(src){
+    let out="", last=0, m;
+    while((m = re.exec(src))){
+      out += esc(src.slice(last, m.index));
+      const [tok, com, str, attr, mac, word, num] = m;
+      if (com) out += `<span class="c">${esc(com)}</span>`;
+      else if (str) out += `<span class="s">${esc(str)}</span>`;
+      else if (attr) out += `<span class="a">${esc(attr)}</span>`;
+      else if (mac) out += `<span class="p">${esc(mac)}</span>`;
+      else if (word) out += KW.has(word) ? `<span class="k">${word}</span>` : /^[A-Z]/.test(word) ? `<span class="t">${word}</span>` : word;
+      else if (num) out += `<span class="n">${num}</span>`;
+      last = m.index + tok.length;
+    }
+    return out + esc(src.slice(last));
+  }
+  function dedent(s){
+    s = s.replace(/^\n+|\s+$/g,"");
+    const lines = s.split("\n");
+    const ind = Math.min(...lines.filter(l=>l.trim()).map(l=>l.match(/^ */)[0].length));
+    return lines.map(l=>l.slice(ind)).join("\n");
+  }
+  document.querySelectorAll('script[type="text/x-swift"]').forEach(el=>{
+    const code = dedent(el.textContent);
+    const fig = document.createElement("figure"); fig.className="code";
+    fig.innerHTML = `<figcaption><span class="dots"><i></i><i></i><i></i></span><span>${esc(el.dataset.title||"Swift")}</span><button type="button">copy</button></figcaption><pre><code>${hl(code)}</code></pre>`;
+    fig.querySelector("button").addEventListener("click", e=>{
+      navigator.clipboard?.writeText(code).then(()=>{ e.target.textContent="copied ✓"; setTimeout(()=>e.target.textContent="copy",1400); });
+    });
+    el.replaceWith(fig);
+  });
+})();
+
+// ---- Scroll progress, reveal-on-scroll, scroll-spy ----
+const bar = document.getElementById("progress");
+addEventListener("scroll", ()=>{
+  const h = document.documentElement;
+  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + "%";
+}, {passive:true});
+
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("on"); io.unobserve(e.target);} }), {threshold:.15});
+document.querySelectorAll(".in").forEach(el=>io.observe(el));
+
+const links = [...document.querySelectorAll("nav.toc a")];
+const spy = new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+e.target.id));
+    }
+  });
+}, {rootMargin:"-40% 0px -55% 0px"});
+document.querySelectorAll("section.topic").forEach(s=>spy.observe(s));
+
+addEventListener("keydown", e=>{
+  if(e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName)){ e.preventDefault(); document.querySelector("nav.toc").scrollIntoView({behavior:"smooth"}); window.scrollTo({top:document.querySelector(".shell").offsetTop,behavior:"smooth"}); }
+});
+// Expand all answers when printing
+addEventListener("beforeprint", ()=>document.querySelectorAll("details").forEach(d=>d.open=true));
+</script>
+</body>
+</html>
