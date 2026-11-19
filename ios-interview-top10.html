@@ -320,7 +320,76 @@ ProfileEditor(user: user)
     </script>
 
     <h3>AnyView and type erasure</h3>
-    <p><code>AnyView</code> hides the static type, so SwiftUI loses structural information and must compare dynamically; if the wrapped type changes, the subtree is replaced. Prefer <code>@ViewBuilder</code>, <code>some View</code>, or a <code>Group</code>/<code>switch</code>, which preserve types. AnyView is acceptable at true dynamic boundaries (plugin-style screens), not in rows of a list.</p>
+    <p><strong>The short version:</strong> SwiftUI diffs primarily by <em>type</em> — the static type <em>is</em> the shape of your view tree. <code>AnyView</code> puts the concrete type in a box, so from the outside all SwiftUI sees is "an <code>AnyView</code>". It can no longer know the structure at compile time and has to open the box and compare the real type at runtime on every update.</p>
+
+    <p><strong>What <code>some View</code> preserves.</strong> <code>some View</code> hides the type from <em>callers</em>, but the compiler still knows it exactly:</p>
+    <script type="text/x-swift" data-title="The type encodes the tree">
+var body: some View {
+    VStack {
+        Text("Title")
+        if showImage { Image(systemName: "star") }
+    }
+}
+// Concrete type known to the compiler:
+// VStack<TupleView<(Text, Optional<Image>)>>
+//   slot 0 is always a Text, slot 1 is an optional Image.
+// That position + type IS the structural identity — no runtime guessing needed.
+    </script>
+
+    <p><strong>What <code>AnyView</code> erases.</strong></p>
+    <script type="text/x-swift" data-title="Both branches have the same static type">
+func makeContent() -> AnyView {
+    if isLoggedIn {
+        return AnyView(ProfileView())
+    } else {
+        return AnyView(LoginView())
+    }
+}
+// Statically: just `AnyView`. On every update SwiftUI must:
+//   1. read the wrapped view and its dynamic type
+//   2. compare it with the type stored last time
+//   3. same type  → descend and diff the contents
+//   4. different  → tear down the whole subtree and build a new one
+//                   (@State lost, onDisappear/onAppear fire, .task cancelled, no animation)
+    </script>
+
+    <p><strong>Three consequences interviewers want to hear:</strong></p>
+    <ul>
+      <li><strong>Identity becomes accidental.</strong> State is reset whenever the wrapped type changes — like an <code>if/else</code>, but invisible in the code. The reverse also bites: with <code>@ViewBuilder</code>, <code>if flag { Text("A") } else { Text("B") }</code> gives two distinct identities (each branch of <code>_ConditionalContent</code>, with transitions). With <code>flag ? AnyView(Text("A")) : AnyView(Text("B"))</code>, both wrap a <code>Text</code>, so SwiftUI treats them as the <em>same</em> view whose content changed: no transition. Identity now depends on which type happens to be inside at runtime, not on the structure you wrote.</li>
+      <li><strong>Performance.</strong> A dynamic type check on every update, an extra box allocation, and no generic specialisation or inlining. It is worst in <code>List</code>/<code>LazyVStack</code>: lazy containers need to cheaply know how many views each <code>ForEach</code> element produces and what their identities are. Apple's WWDC sessions ("Demystify SwiftUI" and the later performance talk) explicitly advise against <code>AnyView</code> in list rows.</li>
+      <li><strong>Debuggability.</strong> "Why did my state / animation disappear?" becomes much harder to answer because the deciding information only exists at runtime.</li>
+    </ul>
+
+    <script type="text/x-swift" data-title="Type-preserving alternatives">
+// ✅ @ViewBuilder keeps the full type (_ConditionalContent<ProfileView, LoginView>)
+@ViewBuilder
+func makeContent() -> some View {
+    if isLoggedIn { ProfileView() } else { LoginView() }
+}
+
+// ✅ switch is encoded in the type, too
+@ViewBuilder
+var content: some View {
+    switch state {
+    case .loading:               ProgressView()
+    case .loaded(let items):     ItemList(items: items)
+    case .failed(let error):     ErrorView(error: error)
+    }
+}
+
+// ✅ Only an attribute differs? Use a modifier, not a branch — one identity, animatable
+CardView().opacity(isVisible ? 1 : 0)
+
+// ✅ Accept views as a generic parameter so the type flows through
+struct Card<Content: View>: View {
+    @ViewBuilder var content: Content
+    var body: some View { content.padding().background(.thinMaterial) }
+}
+    </script>
+
+    <p><strong>When AnyView is legitimate.</strong> When you need real runtime heterogeneity that cannot be known at compile time: plugin registries or server-driven UI (<code>[String: () -&gt; AnyView]</code> chosen by a JSON payload), module-boundary APIs that shouldn't leak generic parameters, or storing views of different types in an array or property. <code>any View</code> doesn't conform to <code>View</code> and can't be returned from <code>body</code> directly, so <code>AnyView</code> is still the tool for these. Keep it at a <strong>high-level, rarely changing boundary</strong> (e.g. a whole screen), never in list rows or frequently updated leaf views.</p>
+
+    <div class="callout good"><b class="lbl">One-breath answer</b>"<code>AnyView</code> erases the view's static type. SwiftUI relies on that type to understand structure and derive structural identity at compile time. With <code>AnyView</code>, it has to compare the wrapped type dynamically on every update. If the type changes, the subtree is torn down and recreated, so state is lost and there's no smooth animation. It also blocks compiler optimisations and hurts lazy containers. I prefer <code>@ViewBuilder</code>, <code>some View</code> or generics, and keep <code>AnyView</code> for genuine runtime heterogeneity, like server-driven UI, at a stable high-level boundary."</div>
 
     <h3>What triggers <code>body</code></h3>
     <p>SwiftUI re-evaluates <code>body</code> when a dependency changes: a stored property passed from the parent differs, a <code>@State</code>/<code>@Binding</code> changes, an environment value it reads changes, or — with <code>@Observable</code> — a property it <em>actually read</em> during the last <code>body</code> call changes. Re-evaluating <code>body</code> is not the same as re-rendering pixels; SwiftUI still diffs the result. The debug helper <code>Self._printChanges()</code> inside <code>body</code> prints which dependency caused the update.</p>
