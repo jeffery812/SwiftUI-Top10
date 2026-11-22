@@ -462,6 +462,107 @@ struct TotalLabel: View {
 }
     </script>
 
+    <h3>Nested objects: does a member's change refresh the view?</h3>
+    <p>Suppose <code>CartModel</code> is <code>@Observable</code> and one of its members is a class. Does changing that class refresh the view? <strong>Only if the member class is itself <code>@Observable</code>.</strong> Also note that what refreshes is not "CartModel's view" but <em>each view whose <code>body</code> read the changed property</em>.</p>
+    <p>The <code>@Observable</code> macro only rewrites the class's <em>own</em> stored properties so that reads and writes go through its <code>ObservationRegistrar</code>. When <code>body</code> evaluates <code>cart.customer.name</code>, every step of the key path that is observable gets registered: <code>CartModel.customer</code> and, if <code>Customer</code> is <code>@Observable</code>, <code>Customer.name</code> too.</p>
+    <script type="text/x-swift" data-title="Plain class vs @Observable class vs struct member">
+final class PlainCustomer { var name = "" }           // not observable
+
+@Observable final class Customer {                    // observable
+    var name = ""
+    var level = 0
+}
+struct Address { var city = ""; var zip = "" }        // value type
+
+@Observable final class CartModel {
+    var plainCustomer = PlainCustomer()
+    var customer = Customer()
+    var address = Address()
+    var items: [Item] = []
+}
+
+// In a view:  Text(cart.customer.name)
+//   registers  CartModel.customer  +  Customer.name
+
+cart.plainCustomer.name = "Anna"   // ❌ nothing refreshes: the reference didn't change,
+                                   //    and PlainCustomer has no registrar
+cart.plainCustomer = PlainCustomer() // ✅ views reading plainCustomer refresh (setter called)
+
+cart.customer.name = "Anna"        // ✅ only views that read customer.name
+cart.customer.level += 1           // ✅ only views that read customer.level
+cart.customer = Customer()         // ✅ every view that reads anything through customer
+
+cart.address.city = "Solna"        // ✅ but coarse: mutating a struct field calls the
+                                   //    `address` setter, so views reading only
+                                   //    address.zip refresh too
+cart.items.append(item)            // ✅ only views that read items
+    </script>
+    <table>
+      <tr><th>Mutation</th><th>Who refreshes</th></tr>
+      <tr><td>plainCustomer.name = …</td><td>Nobody. The UI shows a stale value until something else triggers a refresh.</td></tr>
+      <tr><td>plainCustomer = …</td><td>Views that read <code>plainCustomer</code> (via any path).</td></tr>
+      <tr><td>customer.name = …</td><td>Only views that read <code>customer.name</code>. Views reading <code>customer.level</code> are untouched.</td></tr>
+      <tr><td>customer = …</td><td>All views that read through <code>customer</code>.</td></tr>
+      <tr><td>address.city = …</td><td>All views that read <code>address</code>, including those that only read <code>address.zip</code>.</td></tr>
+      <tr><td>items.append(…)</td><td>Only views that read <code>items</code>.</td></tr>
+    </table>
+    <p>This is a real improvement over <code>ObservableObject</code>, where a nested <code>ObservableObject</code>'s changes never reached the outer object's observers. You had to forward <code>objectWillChange</code> by hand, or pass the child to a subview marked <code>@ObservedObject</code>.</p>
+    <div class="callout"><b class="lbl">Traps</b>Only reads <em>inside <code>body</code></em> are tracked; reads in <code>onAppear</code>, button actions or <code>Task</code> closures don't subscribe the view. Tracking is per view, so splitting a big view into small subviews narrows what refreshes. An array of classes needs <code>@Observable</code> elements for <code>items[0].price = …</code> to refresh anything; with struct elements, mutating one element reassigns the array and refreshes every view that reads <code>items</code>. To confirm, put <code>let _ = Self._printChanges()</code> at the top of <code>body</code> and watch the console.</div>
+
+    <h3>Is @StateObject still recommended?</h3>
+    <p><strong>Not recommended for new code, but not deprecated.</strong> As of iOS 26, <code>@StateObject</code>, <code>@ObservedObject</code>, <code>@EnvironmentObject</code> and <code>ObservableObject</code> carry no deprecation warnings, and existing code keeps working. Since iOS 17, though, Apple's recommended approach is the <code>@Observable</code> macro with <code>@State</code> for ownership. Apple publishes an official guide, <em>"Migrating from the Observable Object protocol to the Observable macro"</em>, and new templates and WWDC sample code all use the new style.</p>
+    <table>
+      <tr><th>ObservableObject (old)</th><th>@Observable (iOS 17+)</th></tr>
+      <tr><td>class VM: ObservableObject</td><td><code>@Observable class VM</code></td></tr>
+      <tr><td>@Published var name</td><td><code>var name</code>, tracked automatically</td></tr>
+      <tr><td>@StateObject var vm = VM()</td><td><code>@State var vm = VM()</code></td></tr>
+      <tr><td>@ObservedObject var vm: VM</td><td>Plain <code>var vm: VM</code>; <code>@Bindable var vm: VM</code> when you need <code>$vm.name</code></td></tr>
+      <tr><td>@EnvironmentObject var vm: VM</td><td><code>@Environment(VM.self) var vm</code></td></tr>
+      <tr><td>.environmentObject(vm)</td><td><code>.environment(vm)</code></td></tr>
+    </table>
+    <script type="text/x-swift" data-title="Before / after">
+// Before (iOS 13+)
+final class ProfileModel: ObservableObject {
+    @Published var name = ""
+    @Published var avatarURL: URL?
+}
+struct ProfileScreen: View {
+    @StateObject private var model = ProfileModel()
+    var body: some View { NameEditor(model: model) }
+}
+struct NameEditor: View {
+    @ObservedObject var model: ProfileModel
+    var body: some View { TextField("Name", text: $model.name) }
+}
+
+// After (iOS 17+)
+@Observable
+final class ProfileModel {
+    var name = ""
+    var avatarURL: URL?
+}
+struct ProfileScreen: View {
+    @State private var model = ProfileModel()     // owner
+    var body: some View { NameEditor(model: model) }
+}
+struct NameEditor: View {
+    @Bindable var model: ProfileModel             // only needed for $model.name
+    var body: some View { TextField("Name", text: $model.name) }
+}
+    </script>
+    <p><strong>Why switch:</strong></p>
+    <ul>
+      <li><strong>Finer-grained updates.</strong> With <code>ObservableObject</code>, any <code>@Published</code> change refreshes every view observing the object. With <code>@Observable</code>, only views whose <code>body</code> actually read the changed property refresh.</li>
+      <li><strong>Simpler.</strong> No <code>@Published</code>, and no confusing <code>@StateObject</code> vs <code>@ObservedObject</code> choice.</li>
+      <li><strong>More flexible.</strong> Optionals, arrays and nested observable objects are tracked correctly. With <code>ObservableObject</code>, nested objects often need their changes forwarded by hand.</li>
+    </ul>
+    <p><strong>When you'd still use @StateObject:</strong></p>
+    <ul>
+      <li>The app still supports <strong>iOS 16 or earlier</strong>; <code>@Observable</code> requires iOS 17.</li>
+      <li>The code relies on Combine's <code>$property</code> publishers or <code>objectWillChange</code> (e.g. <code>$query.debounce(…)</code>). <code>@Observable</code> has no publishers, so these need rewriting with async sequences or <code>didSet</code>.</li>
+      <li>A third-party library requires an <code>ObservableObject</code>.</li>
+    </ul>
+
     <h3>The @State + reference type subtlety</h3>
     <p>With <code>@StateObject</code> the autoclosure ensured the object was created once. With <code>@State private var model = Model()</code>, the initializer expression is evaluated <em>every time the struct is initialised</em>, though SwiftUI keeps only the first instance. If <code>Model.init</code> is expensive or has side effects, that is wasted work. Options: keep inits trivial, create the model lazily in <code>.task</code>, or inject it from the parent.</p>
 
@@ -472,6 +573,8 @@ struct TotalLabel: View {
   <div class="qa">
     <h4>Likely questions</h4>
     <details><summary>@StateObject vs @ObservedObject — what goes wrong if you mix them up?</summary><div class="ans"><p>If a view <em>creates</em> an object with <code>@ObservedObject var vm = VM()</code>, a new instance is created every time the parent re-renders the view, wiping state and potentially restarting network calls. The view that creates it must use <code>@StateObject</code> (or <code>@State</code> with <code>@Observable</code>); children that receive it use <code>@ObservedObject</code> (or a plain property).</p></div></details>
+    <details><summary>CartModel is @Observable. If one of its members is a class and that class changes, does the view refresh?</summary><div class="ans"><p>"Only if the nested class is itself <code>@Observable</code>. Observation tracks each property accessed in <code>body</code> along the whole key path, so <code>cart.customer.name</code> registers both <code>CartModel.customer</code> and <code>Customer.name</code>, and only views that read <code>name</code> update. A plain class member is invisible to Observation: mutating its properties triggers nothing, and only reassigning the reference does. A struct member is coarser: changing any field reassigns the whole property. That's a real improvement over <code>ObservableObject</code>, where nested objects never propagated changes without manually forwarding <code>objectWillChange</code>."</p></div></details>
+    <details><summary>Is @StateObject deprecated? Should new code use it?</summary><div class="ans"><p>"<code>@StateObject</code> isn't deprecated, but since iOS 17 the recommended approach is the <code>@Observable</code> macro with <code>@State</code> for ownership, <code>@Bindable</code> for bindings and <code>@Environment</code> for injection. It gives property-level invalidation instead of whole-object <code>objectWillChange</code>. I'd keep <code>ObservableObject</code> only for iOS 16 support or Combine-dependent code, and watch out that <code>@State</code>'s initializer isn't an autoclosure the way <code>@StateObject</code>'s is."</p></div></details>
     <details><summary>How would you migrate a large app from ObservableObject to @Observable?</summary><div class="ans"><p>Bottom-up and per feature: convert a model, replace <code>@Published</code> with plain vars, <code>@StateObject</code> → <code>@State</code>, <code>@ObservedObject</code> → plain property or <code>@Bindable</code>, <code>@EnvironmentObject</code> → <code>@Environment(Type.self)</code>. Watch for Combine pipelines relying on <code>$property</code> publishers — replace with <code>Observations</code>/async or <code>didSet</code>. Gate on the deployment target (iOS 17). Verify with <code>_printChanges</code> that update counts drop.</p></div></details>
     <details><summary>Why is a struct-based view model sometimes a bad idea?</summary><div class="ans"><p>View models usually need identity and shared mutable state across async work — a struct copied into closures and tasks would diverge. Value types are great for the <em>state</em> (a <code>struct ViewState</code>), held by a reference-typed owner.</p></div></details>
   </div>
