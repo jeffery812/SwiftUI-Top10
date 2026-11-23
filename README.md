@@ -2,6 +2,8 @@
 
 A study guide to the ten iOS / SwiftUI topics that come up most in senior-level interviews, plus a small SwiftUI app with runnable demos for some of them.
 
+**Read online:** <https://jeffery812.github.io/SwiftUI-Top10/>
+
 ## Contents
 
 | Path | What it is |
@@ -11,7 +13,7 @@ A study guide to the ten iOS / SwiftUI topics that come up most in senior-level 
 
 ## The study guide
 
-Open `index.html` in a browser. It needs no build step and no dependencies; only the web fonts load from Google Fonts.
+Read it online at <https://jeffery812.github.io/SwiftUI-Top10/> (published with GitHub Pages from `index.html` on `main`), or open `index.html` locally in a browser. It needs no build step and no dependencies; only the web fonts load from Google Fonts. On GitHub itself, clicking `index.html` only shows the source.
 
 Each chapter follows the same structure: why interviewers ask about it, the mental model, code you should be able to write on a whiteboard, common traps, and likely interview questions with model answers (click a question to reveal its answer).
 
