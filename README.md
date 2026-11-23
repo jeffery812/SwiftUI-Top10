@@ -43,5 +43,6 @@ Open `HelloSwiftUI/HelloSwiftUI.xcodeproj` and run it on an iPhone simulator.
 | NavigationPath | `NavigationDemo/NavigationPathDemo.swift` | A type-erased `NavigationPath` with mixed value types, plus saving and restoring the path with `codable` |
 | Identity | `IdentityDemo/AnyViewIdentityDemo.swift` | How `AnyView` makes identity accidental: same wrapped type keeps state with no transition; a changed wrapped type resets state |
 | Nested | `ObservationDemo/NestedObservationDemo.swift` | Which views refresh when a member of an `@Observable` model changes: a plain class, an `@Observable` class, a struct, or an array |
+| Init | `StateInitDemo/StateInitDemo.swift` | When a property wrapper's initial value is evaluated: `@State` with an `@Observable` class, `@State` with a plain class, and `@StateObject`. Re-rendering the parent re-creates the child view structs; counters compare struct creations with model inits |
 
 The Identity and Nested demos make refreshes visible: cards carry their own `@State` counters, and reader rows show how many times their `body` has run. The Nested demo also logs `Self._printChanges()` to the Xcode console.
