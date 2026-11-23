@@ -41,6 +41,9 @@ struct Address {
 
 struct CartItem: Identifiable {
     let id = UUID()
+    var suffix: String {
+        String("\(id)".suffix(5))
+    }
 }
 
 @Observable
@@ -60,32 +63,9 @@ struct NestedObservationDemo: View {
     // refreshes. Reads inside button actions aren't tracked.
     var body: some View {
         NavigationStack {
+            // Buttons scroll; the readers stay pinned on top so you can see
+            // which ones refresh while you tap.
             List {
-                Section {
-                    ReaderRow(title: "plainCustomer.name", note: "plain class") {
-                        PlainNameReader(cart: cart)
-                    }
-                    ReaderRow(title: "customer.name", note: "@Observable class") {
-                        CustomerNameReader(cart: cart)
-                    }
-                    ReaderRow(title: "customer.level", note: "@Observable class") {
-                        CustomerLevelReader(cart: cart)
-                    }
-                    ReaderRow(title: "address.city", note: "struct") {
-                        CityReader(cart: cart)
-                    }
-                    ReaderRow(title: "address.zip", note: "struct") {
-                        ZipReader(cart: cart)
-                    }
-                    ReaderRow(title: "items.count", note: "array") {
-                        ItemsReader(cart: cart)
-                    }
-                } header: {
-                    Text("Readers: each reads one property")
-                } footer: {
-                    Text("The badge counts body evaluations. The tint changes every time body runs.")
-                }
-
                 Section("1 · Member is a plain class") {
                     MutationButton(
                         "plainCustomer.name = random",
@@ -140,8 +120,41 @@ struct NestedObservationDemo: View {
                     }
                 }
             }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                readersPanel
+            }
             .navigationTitle("Nested Observation")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
+    }
+
+    /// Six readers, each reading exactly one property. Pinned above the list.
+    private var readersPanel: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Each card reads ONE property. Its tint changes and its count goes up whenever its body runs.")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                GridRow {
+                    ReaderRow(title: "plainCustomer.name", note: "plain class") { PlainNameReader(cart: cart) }
+                    ReaderRow(title: "customer.name", note: "@Observable") { CustomerNameReader(cart: cart) }
+                }
+                GridRow {
+                    ReaderRow(title: "customer.level", note: "@Observable") { CustomerLevelReader(cart: cart) }
+                    ReaderRow(title: "items.count", note: "array") { ItemsReader(cart: cart) }
+                }
+                GridRow {
+                    ReaderRow(title: "address.city", note: "struct") { CityReader(cart: cart) }
+                    ReaderRow(title: "address.zip", note: "struct") { ZipReader(cart: cart) }
+                }
+            }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 10)
+        .background(.bar)
+        .overlay(alignment: .bottom) { Divider() }
     }
 
     private func randomName() -> String {
@@ -201,7 +214,7 @@ private struct ItemsReader: View {
     @State private var renders = RenderCount()
     var body: some View {
         let _ = Self._printChanges()
-        RenderBadge(count: renders.bump()) { Text("\(cart.items.count)") }
+        RenderBadge(count: renders.bump()) { Text("\(cart.items.count) \(cart.items.last?.suffix ?? "")") }
     }
 }
 
@@ -226,37 +239,40 @@ private struct RenderBadge<Content: View>: View {
     }
 
     var body: some View {
-        HStack {
+        HStack(alignment: .firstTextBaseline) {
             content
-                .font(.body.monospaced())
-            Spacer()
-            Text("body × \(count)")
-                .font(.caption.monospacedDigit().bold())
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(.thinMaterial, in: .capsule)
+                .font(.callout.monospaced().bold())
+                .lineLimit(1)
+            Spacer(minLength: 4)
+            Text("body ×\(count)")
+                .font(.caption2.monospacedDigit())
+                .foregroundStyle(.secondary)
         }
-        .padding(8)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
         .background(
-            Color(hue: .random(in: 0...1), saturation: 0.5, brightness: 1).opacity(0.35),
+            Color(hue: .random(in: 0...1), saturation: 0.5, brightness: 1).opacity(0.4),
             in: .rect(cornerRadius: 8)
         )
     }
 }
 
+/// A compact card: which property, what kind of member, and the reader itself.
 private struct ReaderRow<Reader: View>: View {
     let title: String
     let note: String
     @ViewBuilder var reader: Reader
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(title).font(.caption.monospaced().bold())
-                Text(note).font(.caption2).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 3) {
+            HStack(spacing: 4) {
+                Text(title).font(.caption2.monospaced().bold()).lineLimit(1).minimumScaleFactor(0.7)
+                Spacer(minLength: 0)
+                Text(note).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
             }
             reader
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -272,12 +288,19 @@ private struct MutationButton: View {
     }
 
     var body: some View {
-        Button(action: action) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title).font(.callout.monospaced())
-                Text(expect).font(.caption).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 6) {
+            Button(action: action) {
+                Label(title, systemImage: "hand.tap.fill")
+                    .font(.footnote.monospaced().weight(.semibold))
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .buttonStyle(.borderedProminent)
+
+            Text("Expect: \(expect)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
+        .padding(.vertical, 4)
     }
 }
 

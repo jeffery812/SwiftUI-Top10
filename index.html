@@ -208,10 +208,117 @@ footer{padding:60px 6vw 80px;font-family:var(--mono);font-size:12px;color:var(--
   .reveal,.in{animation:none;opacity:1;transform:none;transition:none}
   html{scroll-behavior:auto}
 }
+
+/* ---------- VIEW TABS ---------- */
+.viewtabs{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:300;
+  display:flex;gap:2px;background:var(--ink);padding:5px;border-radius:999px;
+  box-shadow:0 18px 40px -16px rgba(30,15,0,.7);
+}
+.viewtabs a{
+  font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--paper);text-decoration:none;padding:9px 18px;border-radius:999px;transition:background .25s,color .25s;
+}
+.viewtabs a b{color:var(--swift);margin-left:6px}
+.viewtabs a:hover{color:#fff}
+.viewtabs a.on{background:var(--paper);color:var(--ink)}
+.viewtabs a.on b{color:var(--swift-deep)}
+
+/* ---------- QUIZ ---------- */
+.quiz-hero{min-height:auto;grid-template-columns:1fr;padding-bottom:5vh}
+.quiz-hero h1{font-size:clamp(52px,7.5vw,128px)}
+.quiz-bar{
+  position:sticky;top:0;z-index:50;background:rgba(243,237,225,.94);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--ink);padding:14px 6vw;display:flex;gap:22px;align-items:center;flex-wrap:wrap;
+}
+.qscore{font-family:var(--display);font-size:30px;font-weight:700;line-height:1;min-width:92px}
+.qscore small{font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-top:4px}
+.qmeter{flex:1;min-width:200px;height:10px;border:1px solid var(--ink);display:flex;background:var(--paper-2)}
+.qmeter i{display:block;height:100%;transition:width .5s cubic-bezier(.2,.7,.1,1)}
+.qmeter .ok{background:var(--moss)}
+.qmeter .bad{background:var(--swift)}
+.qstats{font-family:var(--mono);font-size:12px;color:var(--ink-soft);min-width:190px}
+.qfilters{display:flex;gap:0}
+.qbtn{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  background:transparent;color:var(--ink);border:1px solid var(--ink);padding:7px 12px;cursor:pointer;
+}
+.qfilters .qbtn + .qbtn{border-left:0}
+.qbtn.on{background:var(--ink);color:var(--paper)}
+.qbtn:hover:not(.on){background:var(--paper-2)}
+.qbtn.accent{border-color:var(--swift-deep);color:var(--swift-deep)}
+
+.quiz-main{padding:10px 6vw 160px;max-width:1120px}
+#quiz-list{list-style:none;margin:0;padding:0}
+.q{display:grid;grid-template-columns:120px minmax(0,1fr);gap:28px;padding:60px 0 54px;border-bottom:1px solid var(--ink)}
+.q[hidden]{display:none}
+.q .qn{font-family:var(--display);font-weight:800;font-size:88px;line-height:.8;letter-spacing:-.05em;color:var(--rule);transition:color .4s}
+.q.is-ok .qn{color:var(--moss)}
+.q.is-bad .qn{color:var(--swift)}
+.q .qtag{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.q .qtag a{color:inherit}
+.q h3{font-family:var(--display);font-weight:500;font-size:clamp(22px,2.3vw,30px);line-height:1.22;letter-spacing:-.012em;margin:.35em 0 .5em;max-width:30em}
+.q h3 code{font-size:.64em;padding:.02em .3em;vertical-align:.12em}
+.opts{display:grid;gap:10px;margin:20px 0 0;max-width:52em}
+.opt{
+  display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start;text-align:left;width:100%;
+  background:transparent;border:1px solid var(--rule);padding:13px 16px;font:inherit;font-size:17px;line-height:1.45;color:var(--ink);
+  cursor:pointer;transition:border-color .2s,background .2s,transform .15s,opacity .3s;
+}
+.opt .L{
+  font-family:var(--mono);font-size:12px;font-weight:600;width:28px;height:28px;border:1px solid var(--ink);border-radius:50%;
+  display:grid;place-items:center;transition:background .2s,color .2s,border-color .2s;
+}
+.opt:hover:not(:disabled){border-color:var(--ink);background:var(--paper-2);transform:translateX(4px)}
+.opt:hover:not(:disabled) .L{background:var(--ink);color:var(--paper)}
+.opt:focus-visible{outline:2px solid var(--swift);outline-offset:2px}
+.opt:disabled{cursor:default}
+.opt.correct{border-color:var(--moss);background:rgba(63,90,58,.12)}
+.opt.correct .L{background:var(--moss);border-color:var(--moss);color:var(--paper)}
+.opt.wrong{border-color:var(--swift);background:rgba(232,73,47,.1)}
+.opt.wrong .L{background:var(--swift);border-color:var(--swift);color:#fff}
+.opt.dim{opacity:.5}
+.explain{margin-top:24px;max-width:52em;border-left:4px solid var(--moss);padding:4px 0 4px 22px;animation:rise .5s ease both}
+.explain.bad{border-color:var(--swift)}
+.explain .verdict{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--moss);margin-bottom:8px}
+.explain.bad .verdict{color:var(--swift-deep)}
+.explain p{margin:0 0 .75em;font-size:17.5px}
+.explain h5{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin:16px 0 4px;font-weight:600}
+.explain ul{margin:0 0 14px;padding-left:0;list-style:none}
+.explain li{font-size:16px;color:var(--ink-soft);margin:.3em 0;padding-left:30px;position:relative}
+.explain li b{position:absolute;left:0;font-family:var(--mono);font-size:12px;color:var(--swift-deep)}
+.explain .xact{display:flex;gap:16px;align-items:center;margin-top:6px}
+.explain .xact a{font-family:var(--mono);font-size:12px;color:var(--swift-deep)}
+.explain .xact button{font-family:var(--mono);font-size:12px;background:none;border:0;padding:0;color:var(--ink-soft);text-decoration:underline;cursor:pointer}
+
+.summary{margin:60px 0 0;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:36px 40px;box-shadow:10px 10px 0 var(--swift);animation:rise .6s ease both}
+.summary .big{font-family:var(--display);font-weight:800;font-size:clamp(70px,10vw,140px);line-height:.85;letter-spacing:-.05em}
+.summary .big span{color:var(--swift);font-weight:300}
+.summary h4{font-family:var(--display);font-size:26px;font-weight:500;margin:14px 0 6px}
+.summary p{margin:0 0 1em;color:#d9cfbd;max-width:40em}
+.summary .review{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 22px}
+.summary .review a{font-family:var(--mono);font-size:12px;color:var(--paper);border:1px solid #6b5f50;padding:6px 10px;text-decoration:none}
+.summary .review a:hover{border-color:var(--swift);color:#fff}
+.summary .qbtn{color:var(--paper);border-color:var(--paper);margin-right:8px}
+.summary .qbtn:hover{background:var(--paper);color:var(--ink)}
+.quiz-empty{font-family:var(--mono);font-size:13px;color:var(--ink-soft);padding:60px 0}
+
+@media (max-width:980px){
+  .q{grid-template-columns:1fr;gap:6px}
+  .q .qn{font-size:60px}
+  .quiz-bar{gap:12px}
+}
+@media print{ .viewtabs,.quiz-bar{display:none} }
 </style>
 </head>
 <body>
 <div id="progress"></div>
+<nav class="viewtabs" aria-label="Switch view">
+  <a href="#guide" data-view="guide">Study guide</a>
+  <a href="#quiz" data-view="quiz">Quiz<b>20</b></a>
+</nav>
+
+<div id="view-guide">
 
 <header class="hero">
   <div class="giant" aria-hidden="true">10</div>
@@ -753,7 +860,58 @@ deinit { updatesTask?.cancel() }
     <h4>Likely questions</h4>
     <details><summary>When is unowned the right choice over weak?</summary><div class="ans"><p>When the referenced object is guaranteed to outlive the reference and you want to avoid optional handling, e.g. a <code>Customer</code> and its <code>CreditCard</code> where the card can't exist without the customer, or <code>lazy var</code> closures that only run while self exists. If there's any doubt — especially with escaping async callbacks — use <code>weak</code>; a crash is worse than an optional.</p></div></details>
     <details><summary>Do SwiftUI views cause retain cycles?</summary><div class="ans"><p>Views are structs, so capturing <code>self</code> in a view's closures doesn't create a cycle with the view itself. Cycles appear in the reference types behind them: view models storing closures that capture the model, Combine subscriptions stored on the same object, or environment objects that reference each other.</p></div></details>
-    <details><summary>Does [weak self] in every closure solve everything?</summary><div class="ans"><p>No — it's cargo cult if applied blindly. Non-escaping closures (<code>map</code>, <code>forEach</code>, <code>withAnimation</code>) can't cause cycles. And <code>guard let self</code> at the top of a long async closure re-creates a strong reference for the whole remaining duration. Be intentional: weak where an ownership cycle or unwanted lifetime extension is possible.</p></div></details>
+    <details><summary>Does [weak self] in every closure solve everything?</summary><div class="ans"><p>No — it's cargo cult if applied blindly. Non-escaping closures (<code>map</code>, <code>forEach</code>, <code>withAnimation</code>) can't cause cycles. And <code>guard let self</code> at the top of a long async closure re-creates a strong reference for the whole remaining duration. Be intentional: weak where an ownership cycle or unwanted lifetime extension is possible.</p>
+    <script type="text/x-swift" data-title="Where [weak self] matters — and where it doesn't">
+@MainActor @Observable
+final class FeedViewModel {
+    var items: [Item] = []
+    var isExpanded = false
+    private let api: FeedAPI
+    private var saveTask: Task<Void, Never>?
+
+    init(api: FeedAPI) { self.api = api }
+
+    // 1. Non-escaping closures: run and finish before the call returns. No cycle possible.
+    func titles() -> [String] {
+        items.map { self.format($0) }                 // ✅ no [weak self] needed
+    }
+    func toggle() {
+        withAnimation { self.isExpanded.toggle() }     // ✅ same: non-escaping
+    }
+
+    // 2. ❌ weak in name only: guard let self at the top makes it strong again
+    func reloadBad() {
+        Task { [weak self] in
+            guard let self else { return }             // strong from here on…
+            let fresh = await self.api.fetchFeed()     // …so a 10 s request keeps the
+            self.items = fresh                         //    view model alive after the screen is gone
+        }
+    }
+
+    // 2. ✅ capture what the await needs, re-bind self only after the await
+    func reload() {
+        Task { [weak self, api] in                     // api captured directly, not through self
+            let fresh = await api.fetchFeed()          // self is NOT retained while waiting
+            guard let self else { return }             // screen gone → result dropped
+            self.items = fresh
+        }
+    }
+
+    // 3. Sometimes the strong capture is the point: the save must finish even if the user leaves.
+    func save() {
+        saveTask = Task { await self.api.upload(self.items) }   // short-lived, ends on its own → no lasting cycle
+    }
+
+    private func format(_ item: Item) -> String { item.title }
+}
+
+struct Item { let title: String }
+protocol FeedAPI: Sendable {
+    func fetchFeed() async -> [Item]
+    func upload(_ items: [Item]) async
+}
+    </script>
+    <p>Case 1 can't leak: the closure doesn't outlive the call. Case 2 shows the real trap: <code>guard let self</code> before the first <code>await</code> keeps <code>self</code> alive for the whole request, so the <code>[weak self]</code> achieves nothing. Move the unwrap to <em>after</em> the await and capture the dependencies you need up front. Case 3 is a deliberate strong capture: the task holds <code>self</code> only until the upload ends, which is exactly the lifetime you want. Ask "can this closure outlive the call, and should it keep <code>self</code> alive while it does?" instead of adding <code>[weak self]</code> by reflex.</p></div></details>
   </div>
 </section>
 
@@ -785,6 +943,51 @@ struct LargeMatrix {
     }
 }
     </script>
+
+    <h3>How Array is built: a struct around a heap buffer</h3>
+    <p><code>Array</code> is a generic <strong>struct</strong>, not a class. It feels a bit like a reference type because its elements live in a shared heap buffer, but that's an implementation detail behind value semantics. Its only stored property is a buffer struct that holds a reference to a heap-allocated class instance containing the count, the capacity and the elements, stored contiguously.</p>
+    <script type="text/x-swift" data-title="Standard library (simplified)">
+@frozen
+public struct Array<Element> {
+    internal var _buffer: _ArrayBuffer<Element>   // the only stored property
+}
+
+// Array<Element>                    struct: your variable itself
+//  └─ _buffer: _ArrayBuffer         struct (_ContiguousArrayBuffer on Linux)
+//      └─ reference to a heap object
+//          └─ __ContiguousArrayStorageBase subclass   class, on the heap
+//              ├─ count
+//              ├─ capacity
+//              └─ element 0, element 1, element 2 …   stored contiguously
+//
+// On Apple platforms _ArrayBuffer can also wrap a bridged NSArray.
+    </script>
+    <p>So the variable itself is just one pointer wide, however many elements it holds. Copying an array copies that struct, i.e. the reference, and both copies share the heap storage. Before mutating, <code>append</code> and friends check whether the storage is uniquely referenced, and copy it first if it isn't:</p>
+    <script type="text/x-swift" data-title="Measured (Xcode 27.1, -O)">
+func addr(_ a: [Int]) -> String { a.withUnsafeBufferPointer { "\($0.baseAddress!)" } }
+
+print(MemoryLayout<[Int]>.size)      // 8   one pointer, regardless of element count
+print(MemoryLayout<[String]>.size)   // 8
+print(MemoryLayout<String>.size)     // 16
+
+var a = [1, 2, 3]
+var b = a
+print(addr(a), addr(b))   // 0x…cac020  0x…cac020   same buffer, shared
+b.append(4)
+print(addr(a), addr(b))   // 0x…cac020  0x…cdfc50   b copied on its first mutation
+    </script>
+    <ul>
+      <li><strong>Semantically</strong> it's a value: changing <code>b</code> never affects <code>a</code>.</li>
+      <li><strong>Performance-wise</strong>, copying is O(1); the O(n) copy is paid only when a shared buffer is mutated.</li>
+    </ul>
+    <table>
+      <tr><th>Type</th><th>Implementation</th></tr>
+      <tr><td>Dictionary, Set</td><td>The same pattern: a struct wrapper, heap storage and copy-on-write.</td></tr>
+      <tr><td>String</td><td>A 16-byte struct (<code>_StringGuts</code> inside). On 64-bit platforms, strings up to 15 UTF-8 bytes are stored inline in those 16 bytes with no heap allocation (small strings); longer strings use heap storage with copy-on-write.</td></tr>
+      <tr><td>Data (Foundation)</td><td>A struct that stores small data inline and larger data on the heap, with copy-on-write.</td></tr>
+      <tr><td>NSMutableArray</td><td>A real reference type (a class), for contrast.</td></tr>
+    </table>
+    <div class="callout"><b class="lbl">Why it matters for Observation</b>An <code>@Observable</code> model stores the <code>Array</code> <em>value</em>. <code>cart.items.append(x)</code> mutates that value through the property's modify accessor, which goes through <code>withMutation(keyPath: \.items)</code>, so every view that read <code>items</code> refreshes, even one that only read <code>items.count</code>. The heap storage class is invisible to Observation. Compare with a plain-class member: <code>cart.customer.name = "x"</code> only <em>reads</em> the same reference and mutates the object, so the model's property never changes and nothing is notified.</div>
 
     <h3>Dispatch</h3>
     <ul>
@@ -828,7 +1031,71 @@ let handlers: [any DeepLinkHandler] = [ProductHandler(), CartHandler()]
   <div class="qa">
     <h4>Likely questions</h4>
     <details><summary>Struct or class for a model — how do you decide?</summary><div class="ans"><p>Struct by default: value semantics, thread-safety, cheap equality, works with SwiftUI diffing. Class when identity matters (a shared, mutable entity that multiple owners observe), when you need inheritance or Objective-C interop, when the model is an <code>@Observable</code> / SwiftData <code>@Model</code>, or when copying would be semantically wrong (a file handle, a connection).</p></div></details>
-    <details><summary>Why can't you use a protocol with associated types as a plain type before Swift 5.7?</summary><div class="ans"><p>The compiler couldn't know the associated type, so it couldn't type-check member usage. Swift 5.7 introduced <code>any P</code> with implicit existential opening and primary associated types (<code>any Collection&lt;Int&gt;</code>), which covers most cases that previously needed manual type erasers like <code>AnyPublisher</code>.</p></div></details>
+    <details><summary>Why can't you use a protocol with associated types as a plain type before Swift 5.7?</summary><div class="ans"><p>The compiler couldn't know the associated type, so it couldn't type-check member usage. Swift 5.7 introduced <code>any P</code> with implicit existential opening and primary associated types (<code>any Collection&lt;Int&gt;</code>), which covers most cases that previously needed manual type erasers like <code>AnyPublisher</code>.</p>
+    <p>The root problem is the associated type. A protocol like <code>Repository</code> below says "there is <em>some</em> <code>Item</code>", but each conforming type picks a different one. A variable of type "just <code>Repository</code>" would hide which one, and then <code>save(_:)</code> has no knowable parameter type and <code>fetchAll()</code> no knowable return type. Before 5.7 the compiler simply refused such a variable; the fix was a hand-written eraser that fixes <code>Item</code> as a generic parameter (<code>AnyRepository&lt;Book&gt;</code>), which is exactly what <code>AnyPublisher&lt;Output, Failure&gt;</code>, <code>AnySequence&lt;Element&gt;</code> and friends are.</p>
+    <script type="text/x-swift" data-title="Associated types: before and after Swift 5.7">
+protocol Repository<Item> {          // <Item> = primary associated type (Swift 5.7)
+    associatedtype Item
+    func fetchAll() -> [Item]
+    func save(_ item: Item)
+}
+
+struct Book  { let title: String }
+struct Movie { let title: String }
+
+struct BookRepository: Repository {    // Item is inferred as Book
+    func fetchAll() -> [Book] { [Book(title: "Dune")] }
+    func save(_ item: Book) { }
+}
+struct MovieRepository: Repository {   // Item is inferred as Movie
+    func fetchAll() -> [Movie] { [Movie(title: "Alien")] }
+    func save(_ item: Movie) { }
+}
+
+// ── Before Swift 5.7 ──────────────────────────────────────────────
+// let repo: Repository = BookRepository()
+// ❌ protocol 'Repository' can only be used as a generic constraint
+//    because it has Self or associated type requirements
+//
+// Why: given only "some Repository", what would this mean?
+//     repo.save(???)        // Book? Movie? the compiler can't know Item,
+//     let x = repo.fetchAll()  // so it can't type-check the argument or the result
+
+// The workaround: a hand-written type eraser that pins Item down
+struct AnyRepository<Item>: Repository {
+    private let _fetchAll: () -> [Item]
+    private let _save: (Item) -> Void
+    init<R: Repository>(_ base: R) where R.Item == Item {
+        _fetchAll = base.fetchAll
+        _save = base.save
+    }
+    func fetchAll() -> [Item] { _fetchAll() }
+    func save(_ item: Item) { _save(item) }
+}
+let erased: AnyRepository<Book> = AnyRepository(BookRepository())   // AnyPublisher, AnySequence, AnyView… same idea
+
+// ── Swift 5.7+ ────────────────────────────────────────────────────
+// 1. `any Repository` is allowed, but members that need Item are limited
+let anyRepo: any Repository = BookRepository()
+let items = anyRepo.fetchAll()        // ✅ compiles, but items is [Any]: Item erased to its upper bound
+// anyRepo.save(Book(title: "x"))     // ❌ member 'save' cannot be used on value of type 'any Repository'
+                                      //    (Item in argument position: nothing safe to pass)
+
+// 2. Primary associated type: say which Item you mean → full API, no eraser needed
+let books: any Repository<Book> = BookRepository()
+let all: [Book] = books.fetchAll()    // ✅ typed
+books.save(Book(title: "Foundation")) // ✅
+
+// 3. Implicit opening: pass `any Repository` to a generic function;
+//    inside, R is the real concrete type, so Item is known and consistent
+func resaveFirst<R: Repository>(_ repo: R) {
+    if let first = repo.fetchAll().first { repo.save(first) }   // ✅ first is R.Item
+}
+let mixed: [any Repository] = [BookRepository(), MovieRepository()]   // heterogeneous
+for repo in mixed { resaveFirst(repo) }   // ✅ each box is "opened" to its concrete type
+    </script>
+    <p>Three things changed in 5.7. <strong>1.</strong> <code>any Repository</code> is legal, but where <code>Item</code> appears in a <em>result</em> it is erased to its upper bound (<code>[Any]</code> here), and where it appears as an <em>argument</em> the member can't be called at all, because there's no value the compiler can prove is the right type. <strong>2.</strong> Primary associated types (<code>protocol Repository&lt;Item&gt;</code>) let you write <code>any Repository&lt;Book&gt;</code>: <code>Item</code> is known again, so the full API works and the eraser struct becomes unnecessary. <strong>3.</strong> Implicit opening: passing an <code>any Repository</code> to a generic function "opens" the box, so inside <code>resaveFirst</code> the concrete type and its <code>Item</code> are known and <code>fetchAll()</code>'s result can be fed back into <code>save(_:)</code>. That is how you work with a heterogeneous <code>[any Repository]</code> without erasers. Erasers still make sense for API surfaces you publish (e.g. <code>AnyPublisher</code> hides operator chains) or when you need to store extra behaviour alongside the erased value.</p></div></details>
+    <details><summary>Is Array a reference type? Its elements live on the heap.</summary><div class="ans"><p>No. <code>Array</code> is a struct with a single stored property, a buffer that references a heap-allocated storage object holding the count, capacity and contiguous elements. That's why <code>MemoryLayout&lt;[Int]&gt;.size</code> is 8. Copies share the storage, and the first mutation of a shared buffer copies it (copy-on-write, via a uniqueness check). So it has value semantics with O(1) copies. <code>Dictionary</code>, <code>Set</code> and <code>String</code> follow the same design, and <code>String</code> also stores short strings inline. Your own structs that wrap a class don't get this automatically; you implement it with <code>isKnownUniquelyReferenced</code>.</p></div></details>
     <details><summary>Is a struct always on the stack?</summary><div class="ans"><p>No. Location depends on context: structs stored in a class, captured by an escaping closure, boxed in an existential that exceeds the inline buffer, or with indirect enum cases live on the heap. Value semantics is about behaviour, not location.</p></div></details>
   </div>
 </section>
@@ -900,7 +1167,120 @@ final class OrdersModel {
   </div>
   <div class="qa">
     <h4>Likely questions</h4>
-    <details><summary>Is MVVM still necessary with SwiftUI?</summary><div class="ans"><p>It's not required — SwiftUI views plus <code>@Observable</code> models are already a kind of MVVM. What matters is that business logic isn't trapped in <code>body</code> and can be tested without the UI. For simple screens I use a model directly; for complex screens with async flows, validation, and multiple dependencies, a dedicated observable screen model pays off. I'd align with the team's existing convention over personal preference.</p></div></details>
+    <details><summary>Is MVVM still necessary with SwiftUI?</summary><div class="ans"><p>It's not required — SwiftUI views plus <code>@Observable</code> models are already a kind of MVVM. What matters is that business logic isn't trapped in <code>body</code> and can be tested without the UI. For simple screens I use a model directly; for complex screens with async flows, validation, and multiple dependencies, a dedicated observable screen model pays off. I'd align with the team's existing convention over personal preference.</p>
+    <p>"Not required" means you don't need to bolt a <code>XxxViewModel</code> class onto every view by reflex. The <em>idea</em> behind MVVM still applies. In UIKit a view model did two jobs: it provided binding (with Combine or RxSwift) and it moved logic out of the view controller so it could be tested. SwiftUI already does the binding with <code>@State</code>, <code>@Binding</code> and <code>@Observable</code>. The only question left is whether this screen has logic worth testing outside <code>body</code>. Three cases:</p>
+    <script type="text/x-swift" data-title="Three screens, three answers">
+// ── 1. Simple screen: no extra layer. @State / @AppStorage are the "view model".
+struct SettingsView: View {
+    @AppStorage("darkMode") private var darkMode = false
+    @State private var showAbout = false
+
+    var body: some View {
+        Form {
+            Toggle("Dark mode", isOn: $darkMode)
+            Button("About") { showAbout = true }
+        }
+        .sheet(isPresented: $showAbout) { Text("About") }
+    }
+}
+
+// ── 2. Domain model: app-wide, knows nothing about any screen. Views read it directly.
+@MainActor @Observable
+final class Cart {
+    var items: [LineItem] = []
+    var total: Decimal { items.reduce(0) { $0 + $1.price * Decimal($1.quantity) } }
+    func add(_ product: Product) {
+        items.append(LineItem(name: product.name, price: product.price, quantity: 1))
+    }
+}
+
+struct CartBadge: View {
+    let cart: Cart
+    var body: some View { Text("\(cart.items.count)") }   // no CartBadgeViewModel needed
+}
+
+// ── 3. Complex screen: a screen-scoped model. By role, this IS a view model.
+@MainActor @Observable
+final class CheckoutViewModel {            // or CheckoutModel — see the naming note below
+    // Presentation state: exists only because a screen shows it
+    var address = ""
+    var isSubmitting = false               // drives the spinner
+    var errorMessage: String?              // drives the alert
+    var canSubmit: Bool { !address.isEmpty && !isSubmitting }   // drives the button
+
+    private let payment: any PaymentService
+    private let orders: any OrderService
+
+    init(payment: any PaymentService, orders: any OrderService) {
+        self.payment = payment
+        self.orders = orders
+    }
+
+    // Orchestrates one user action across several dependencies
+    func submit(cart: Cart) async {
+        isSubmitting = true
+        defer { isSubmitting = false }
+        do {
+            let receipt = try await payment.charge(cart.total)
+            try await orders.place(cart.items, address: address, receipt: receipt)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+
+struct CheckoutView: View {
+    let cart: Cart
+    @State private var model: CheckoutViewModel
+
+    init(cart: Cart, payment: any PaymentService, orders: any OrderService) {
+        self.cart = cart
+        _model = State(initialValue: CheckoutViewModel(payment: payment, orders: orders))
+    }
+
+    var body: some View {
+        Form {
+            TextField("Address", text: $model.address)
+            Button("Pay \(cart.total, format: .currency(code: "SEK"))") {
+                Task { await model.submit(cart: cart) }
+            }
+            .disabled(!model.canSubmit)
+            if model.isSubmitting { ProgressView() }
+        }
+        .alert("Payment failed", isPresented: .constant(model.errorMessage != nil)) {
+            Button("OK") { model.errorMessage = nil }
+        } message: { Text(model.errorMessage ?? "") }
+    }
+}
+
+// Testable without any UI: inject a fake that throws, assert on state
+struct FailingPayment: PaymentService {
+    struct Declined: Error {}
+    func charge(_ amount: Decimal) async throws -> Receipt { throw Declined() }
+}
+// let vm = CheckoutViewModel(payment: FailingPayment(), orders: StubOrders())
+// await vm.submit(cart: cart)
+// #expect(vm.errorMessage != nil && vm.isSubmitting == false)
+
+struct Product { let name: String; let price: Decimal }
+struct LineItem { let name: String; let price: Decimal; let quantity: Int }
+struct Receipt: Sendable { let id: String }
+protocol PaymentService: Sendable { func charge(_ amount: Decimal) async throws -> Receipt }
+protocol OrderService: Sendable {
+    func place(_ items: [LineItem], address: String, receipt: Receipt) async throws
+}
+    </script>
+    <p>Case 1 has nothing to test, so a <code>SettingsViewModel</code> would just forward properties. Case 2 keeps the rules in a domain model that several screens share, and views read it directly (often called "MV"). Case 3 holds state that only exists because a screen shows it: a spinner flag, an error message, a button-enabled rule. It also coordinates two services for one user action. By role that is a view model, whatever you name it, and it's testable by injecting a failing <code>PaymentService</code>.</p>
+    <p><strong>Naming: when to say <code>ViewModel</code>, when <code>Model</code>.</strong> The role doesn't change with the name. The naming choice is about what the reader should infer:</p>
+    <table>
+      <tr><th>Situation</th><th>Name</th><th>Why</th></tr>
+      <tr><td>screen-scoped state</td><td><code>…ViewModel</code></td><td>It holds presentation state for one screen (<code>isSubmitting</code>, <code>errorMessage</code>, <code>canSubmit</code>). The suffix tells readers "this is screen state, not business data".</td></tr>
+      <tr><td>domain data</td><td><code>…Model</code> or a plain noun</td><td><code>Cart</code>, <code>Library</code>, <code>Session</code>: rules and data with no screen in mind. Calling these view models would invite UI state into them.</td></tr>
+      <tr><td>multi-screen flow</td><td><code>…Model</code></td><td>One object drives address → payment → confirm across several views. Tying the name to one View would mislead.</td></tr>
+      <tr><td>existing MVVM codebase</td><td><code>…ViewModel</code></td><td>The team, or the UIKit half of the app, already uses MVVM naming. Consistency beats taste.</td></tr>
+      <tr><td>Apple-style codebase</td><td><code>…Model</code></td><td>The team follows Apple's post-<code>@Observable</code> sample code, where screen-level objects are simply "models".</td></tr>
+    </table>
+    <p>Whichever name you pick, keep the boundary: no <code>isSubmitting</code> or <code>errorMessage</code> inside domain models like <code>Cart</code>, and no screen-level class that only forwards properties. Consistency across the codebase matters more than either name.</p></div></details>
     <details><summary>How would you design an offline-first feed?</summary><div class="ans"><p>Local database is the source of truth; UI observes the DB. A sync engine fetches pages (cursor-based), upserts into the DB, and records a sync token. User mutations are written locally with a pending status and queued in an outbox with idempotency keys; a background processor flushes the queue with exponential backoff and reconciles server responses. Conflicts resolved by server-wins or field-level merge depending on domain. Use BGTaskScheduler for refresh, and expose sync state to the UI.</p></div></details>
   </div>
 </section>
@@ -1227,6 +1607,36 @@ struct OrdersModelTests {
 </section>
 </main>
 </div>
+</div><!-- /view-guide -->
+
+<div id="view-quiz" hidden>
+<header class="hero quiz-hero">
+  <div class="giant" aria-hidden="true">20</div>
+  <div>
+    <div class="kicker reveal d1">Self-check · 20 questions · all 10 chapters</div>
+    <h1 class="reveal d2"><span class="thin">Answer first,</span><br><em>then</em> read why.</h1>
+    <p class="lede reveal d3">Twenty questions on the topics senior iOS interviews lean on hardest. Pick an answer and you'll immediately see whether it's right, a full explanation, and why each of the other options is wrong. Your answers are saved in this browser, so you can come back later.</p>
+  </div>
+</header>
+
+<div class="quiz-bar">
+  <div class="qscore" id="qscore">0<small>correct</small></div>
+  <div class="qmeter" aria-hidden="true"><i class="ok" id="qmeter-ok"></i><i class="bad" id="qmeter-bad"></i></div>
+  <div class="qstats" id="qstats"></div>
+  <div class="qfilters" role="group" aria-label="Filter questions">
+    <button type="button" class="qbtn on" data-filter="all">All</button>
+    <button type="button" class="qbtn" data-filter="open">Unanswered</button>
+    <button type="button" class="qbtn" data-filter="wrong">Wrong</button>
+  </div>
+  <button type="button" class="qbtn accent" id="qreset">Reset</button>
+</div>
+
+<main class="quiz-main">
+  <ol id="quiz-list"></ol>
+  <p class="quiz-empty" id="quiz-empty" hidden></p>
+  <section class="summary" id="quiz-summary" hidden></section>
+</main>
+</div><!-- /view-quiz -->
 
 <footer>
   <span>The Senior iOS Field Manual — ten topics, one interview.</span>
@@ -1235,7 +1645,7 @@ struct OrdersModelTests {
 
 <script>
 // ---- Tiny Swift highlighter: converts <script type="text/x-swift"> blocks into styled figures ----
-(function(){
+const SwiftHL = (function(){
   const KW = new Set(("actor any as associatedtype async await break case catch class continue default defer deinit do else enum extension fallthrough false fileprivate final for func get guard if import in init inout internal is lazy let mutating nil nonisolated open operator override private protocol public repeat rethrows return self Self set some static struct subscript super switch throw throws true try typealias unowned var weak where while willSet didSet consuming borrowing sending").split(" "));
   const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   const re = /(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|(@[A-Za-z_]\w*)|(#[A-Za-z_]\w*)|\b([A-Za-z_]\w*)\b|\b(\d[\d_.]*)\b/g;
@@ -1260,15 +1670,18 @@ struct OrdersModelTests {
     const ind = Math.min(...lines.filter(l=>l.trim()).map(l=>l.match(/^ */)[0].length));
     return lines.map(l=>l.slice(ind)).join("\n");
   }
-  document.querySelectorAll('script[type="text/x-swift"]').forEach(el=>{
-    const code = dedent(el.textContent);
+  function figure(code, title){
     const fig = document.createElement("figure"); fig.className="code";
-    fig.innerHTML = `<figcaption><span class="dots"><i></i><i></i><i></i></span><span>${esc(el.dataset.title||"Swift")}</span><button type="button">copy</button></figcaption><pre><code>${hl(code)}</code></pre>`;
+    fig.innerHTML = `<figcaption><span class="dots"><i></i><i></i><i></i></span><span>${esc(title||"Swift")}</span><button type="button">copy</button></figcaption><pre><code>${hl(code)}</code></pre>`;
     fig.querySelector("button").addEventListener("click", e=>{
       navigator.clipboard?.writeText(code).then(()=>{ e.target.textContent="copied ✓"; setTimeout(()=>e.target.textContent="copy",1400); });
     });
-    el.replaceWith(fig);
+    return fig;
+  }
+  document.querySelectorAll('script[type="text/x-swift"]').forEach(el=>{
+    el.replaceWith(figure(dedent(el.textContent), el.dataset.title));
   });
+  return { hl, esc, dedent, figure };
 })();
 
 // ---- Scroll progress, reveal-on-scroll, scroll-spy ----
@@ -1292,10 +1705,671 @@ const spy = new IntersectionObserver(es=>{
 document.querySelectorAll("section.topic").forEach(s=>spy.observe(s));
 
 addEventListener("keydown", e=>{
-  if(e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName)){ e.preventDefault(); document.querySelector("nav.toc").scrollIntoView({behavior:"smooth"}); window.scrollTo({top:document.querySelector(".shell").offsetTop,behavior:"smooth"}); }
+  if(e.key==="/" && !document.getElementById("view-guide").hidden && !/input|textarea/i.test(document.activeElement.tagName)){ e.preventDefault(); document.querySelector("nav.toc").scrollIntoView({behavior:"smooth"}); window.scrollTo({top:document.querySelector(".shell").offsetTop,behavior:"smooth"}); }
 });
 // Expand all answers when printing
 addEventListener("beforeprint", ()=>document.querySelectorAll("details").forEach(d=>d.open=true));
+</script>
+
+<script type="application/json" id="quiz-data">[
+{
+"ch": 1,
+"topic": "View identity",
+"q": "`isHighlighted` toggles inside `withAnimation`. `CardView` keeps its own `@State`. What happens?",
+"code": "if isHighlighted {\n    CardView(item: item).background(.yellow)\n} else {\n    CardView(item: item)\n}",
+"opts": [
+"The background animates to yellow and `CardView` keeps its state.",
+"`CardView` is destroyed and recreated: its `@State` resets and you get a transition (a fade by default) instead of an animated background.",
+"Nothing changes visually until the parent's `body` runs again.",
+"It doesn't compile, because both branches must return the same type."
+],
+"a": 1,
+"exp": [
+"Each branch of an `if/else` in a `@ViewBuilder` becomes a separate slot of `_ConditionalContent<A, B>`, so the two `CardView`s have **different structural identities**. Toggling tears one down (state lost, removal transition) and inserts the other.",
+"Fix: keep one identity and change only the attribute: `CardView(item: item).background(isHighlighted ? .yellow : .clear)`."
+],
+"why": [
+"That's what the modifier version does, because it has a single identity.",
+null,
+"Changing state does re-run `body`; the problem is what the new tree means.",
+"`@ViewBuilder` wraps different branch types in `_ConditionalContent`, so it compiles fine."
+],
+"id": "q1"
+},
+{
+"ch": 1,
+"topic": "AnyView",
+"q": "Each card has its own `@State` counter. You tap +1 three times on card A, then flip `flag` inside `withAnimation`. What do you see?",
+"code": "var content: AnyView {\n    flag ? AnyView(CounterCard(label: \"A\").transition(.slide))\n         : AnyView(CounterCard(label: \"B\").transition(.slide))\n}",
+"opts": [
+"A slides out, and B slides in with count 0.",
+"B slides in with count 3.",
+"No slide transition: the label changes to B in place, and the count stays 3.",
+"A runtime error, because `AnyView` can't be animated."
+],
+"a": 2,
+"exp": [
+"With `AnyView`, identity is decided **at runtime by the wrapped type**. Both branches wrap the same type, so SwiftUI treats it as one view whose inputs changed: state is preserved and insertion/removal transitions never run.",
+"With a `@ViewBuilder` `if flag { A } else { B }` you'd get two identities: A slides out and a fresh B (count 0) slides in. Identity should come from the structure you wrote, not from whatever type happens to be in the box."
+],
+"why": [
+"That's the `@ViewBuilder` if/else behaviour.",
+"A transition would mean a new identity with fresh state; you can't get a transition and a kept count together.",
+null,
+"`AnyView` animates fine; the animatable properties of its content still interpolate."
+],
+"id": "q2"
+},
+{
+"ch": 1,
+"topic": "Lifetime & .task",
+"q": "A detail screen must reload whenever `selectedID` changes, and cancel any in-flight request when the screen goes away. What's the best fit?",
+"code": null,
+"opts": [
+"`.onAppear { Task { await load(selectedID) } }`",
+"`.onChange(of: selectedID) { Task { await load(selectedID) } }`",
+"Start loading in the view's `init`.",
+"`.task(id: selectedID) { await load(selectedID) }`"
+],
+"a": 3,
+"exp": [
+"`.task(id:)` starts when the view appears, **cancels the running task and starts a new one** when `id` changes, and cancels automatically when the view disappears. One modifier covers all three requirements.",
+"Make `load` respect cancellation (URLSession's async APIs throw when cancelled), so a stale response can't overwrite newer data."
+],
+"why": [
+"Runs only on appear, so it won't reload on ID changes, and the unstructured `Task` is never cancelled.",
+"Reloads, but doesn't run initially (unless `initial: true`) and never cancels the previous request.",
+"A view's `init` runs every time the parent re-evaluates `body`; side effects there repeat and can't be cancelled.",
+null
+],
+"id": "q3"
+},
+{
+"ch": 2,
+"topic": "@State vs @StateObject",
+"q": "`ProfileModel` is `@Observable`, and its `init` opens a database connection. What happens each time the parent re-evaluates its `body`?",
+"code": "struct ProfileScreen: View {\n    @State private var model = ProfileModel()\n    var body: some View { ... }\n}",
+"opts": [
+"Nothing: `@State` evaluates `ProfileModel()` only once, like `@StateObject`.",
+"`ProfileModel()` runs again every time `ProfileScreen` is initialised. SwiftUI keeps the first instance and discards the new one, but the connection is opened anyway.",
+"The stored model is replaced with the new instance, so its state resets.",
+"It crashes, because `@State` requires a value type."
+],
+"a": 1,
+"exp": [
+"`@StateObject`'s parameter is an `@autoclosure`, evaluated once. `@State`'s initial value is an ordinary expression: it's evaluated **every time the view struct is created**, and SwiftUI ignores the result after the first time.",
+"Keep initializers cheap and free of side effects, do the work in `.task { await model.load() }`, or create the model in a parent and pass it in."
+],
+"why": [
+"This is exactly the migration difference between `@StateObject` and `@State`.",
+null,
+"SwiftUI keeps the stored instance; the only cost is the wasted work.",
+"`@State` happily holds `@Observable` reference types (iOS 17+). It's the recommended way to own them."
+],
+"id": "q4"
+},
+{
+"ch": 2,
+"topic": "Observation granularity",
+"q": "A view only reads `model.title`. Elsewhere, `model.progress` changes. With which model does the view's `body` run again?",
+"code": "// Version 1\nfinal class Model: ObservableObject {\n    @Published var title = \"\"\n    @Published var progress = 0.0\n}\n\n// Version 2\n@Observable final class Model {\n    var title = \"\"\n    var progress = 0.0\n}",
+"opts": [
+"Only Version 1 (`ObservableObject`)",
+"Only Version 2 (`@Observable`)",
+"Both versions",
+"Neither version"
+],
+"a": 0,
+"exp": [
+"`ObservableObject` has a single `objectWillChange` publisher. Any `@Published` change fires it, and **every** observing view is invalidated, whatever it reads.",
+"`@Observable` records which properties each `body` actually read and invalidates only views that read the changed property. This view never read `progress`, so it stays put."
+],
+"why": [
+null,
+"It's the other way round: `@Observable` is the fine-grained one.",
+"Only `ObservableObject` is coarse-grained.",
+"`ObservableObject` invalidates on any `@Published` change."
+],
+"id": "q5"
+},
+{
+"ch": 2,
+"topic": "Nested objects",
+"q": "`CartModel` is `@Observable`, but `Customer` is a plain class. A view shows `Text(cart.customer.name)`. Then `cart.customer.name = \"Anna\"` runs. What does the view do?",
+"code": "final class Customer { var name = \"\" }\n\n@Observable final class CartModel {\n    var customer = Customer()\n}",
+"opts": [
+"It refreshes, because `CartModel` is `@Observable`.",
+"It refreshes, but only on the next run-loop pass.",
+"It crashes: `@Observable` classes can't hold non-observable classes.",
+"It doesn't refresh. Only reassigning `cart.customer` would trigger an update."
+],
+"a": 3,
+"exp": [
+"`@Observable` only instruments **its own stored properties**. `cart.customer.name = ...` reads `customer` (no setter call; the reference is unchanged), then writes to a plain class that has no registrar. Nothing tells SwiftUI.",
+"Make `Customer` `@Observable` too. Observation then registers both `CartModel.customer` and `Customer.name` for that view, and only views that read `name` refresh."
+],
+"why": [
+"Observation isn't recursive; it only tracks accesses on observable types.",
+"There's no delayed refresh; no change notification is ever sent.",
+"Any type can be stored; it just isn't tracked.",
+null
+],
+"id": "q6"
+},
+{
+"ch": 2,
+"topic": "@Bindable",
+"q": "A child view receives an `@Observable` model owned by its parent and needs `TextField(\"Name\", text: $model.name)`. How should it declare `model`?",
+"code": null,
+"opts": [
+"`@State var model: ProfileModel`",
+"`@Bindable var model: ProfileModel`",
+"`@ObservedObject var model: ProfileModel`",
+"`@Binding var model: ProfileModel`"
+],
+"a": 1,
+"exp": [
+"`@Bindable` lets `$model.name` produce a `Binding<String>` into an `@Observable` object **owned elsewhere**. Just reading properties needs nothing special: a plain `let model: ProfileModel` is still tracked.",
+"For objects from `@Environment` you can write `@Bindable var model = model` inside `body`."
+],
+"why": [
+"`@State` means this view owns it, so the instance from the parent would be ignored after the first initialisation.",
+null,
+"`@ObservedObject` requires `ObservableObject`, which an `@Observable` class doesn't conform to.",
+"`@Binding` binds to a value owned elsewhere. With a reference type you want bindings to its properties, not to the reference."
+],
+"id": "q7"
+},
+{
+"ch": 3,
+"topic": "Actor reentrancy",
+"q": "Two callers ask for the same URL at almost the same time. What can happen?",
+"code": "actor ImageCache {\n    private var cache: [URL: Image] = [:]\n\n    func image(for url: URL) async throws -> Image {\n        if let cached = cache[url] { return cached }\n        let image = try await download(url)\n        cache[url] = image\n        return image\n    }\n}",
+"opts": [
+"Nothing bad: the actor serialises the whole method, so the second call waits and then hits the cache.",
+"A data race on `cache` that can crash the app.",
+"Both calls miss the cache and download the image twice, because the actor is re-entered while the first call is suspended at `await`.",
+"A deadlock, because the second call waits for the first one to finish."
+],
+"a": 2,
+"exp": [
+"Actors are **reentrant**: at every `await` the actor is free to run other calls. The second call checks the cache while the first is suspended in `download`, finds nothing, and starts its own download.",
+"There's no data race (the actor still protects `cache`), but there is a logical race. Fix: store in-flight `Task`s in a dictionary **before** awaiting, let later callers `await` the existing task, and re-check assumptions after every `await`."
+],
+"why": [
+"Serialisation only holds between suspension points, not across an `await`.",
+"Actor isolation rules out low-level data races on `cache`.",
+null,
+"Reentrancy exists precisely so actors don't deadlock like this."
+],
+"id": "q8"
+},
+{
+"ch": 3,
+"topic": "Task isolation",
+"q": "Where does the code inside this `Task` run?",
+"code": "@MainActor\nfinal class FeedModel {\n    var items: [Item] = []\n\n    func refresh() {\n        Task {\n            let fresh = try await api.fetchItems()\n            items = fresh\n        }\n    }\n}",
+"opts": [
+"On a background thread: `Task` always uses the global concurrent pool.",
+"On the main actor: `Task { }` inherits the actor isolation of the place it's created. While suspended at `await`, `fetchItems()` runs according to its own isolation.",
+"On the main actor only if you write `Task { @MainActor in ... }`; without it, assigning `items` is a compile error.",
+"On whichever thread called `refresh()`."
+],
+"a": 1,
+"exp": [
+"`Task { }` inherits the current actor isolation, priority and task-local values. Created in a `@MainActor` method, its body is main-actor isolated, so `items = fresh` is safe and compiles with no extra annotation.",
+"At `await` the task suspends and frees the main actor. Where `fetchItems()` runs depends on its own isolation: an actor method runs on that actor; with Swift 6.2's approachable concurrency a plain `nonisolated async` function runs on the caller's actor unless it's marked `@concurrent`. `Task.detached` is the variant that inherits nothing."
+],
+"why": [
+"That describes `Task.detached`, not `Task { }`.",
+null,
+"The explicit annotation is redundant here; the isolation is inherited.",
+"Swift concurrency reasons about actors and executors, not about the calling thread."
+],
+"id": "q9"
+},
+{
+"ch": 3,
+"topic": "Cancellation",
+"q": "You call `task.cancel()` while this loop is running. What happens?",
+"code": "let task = Task {\n    for file in files {\n        let data = try Data(contentsOf: file)   // synchronous\n        process(data)\n    }\n}",
+"opts": [
+"The task stops immediately, wherever it is.",
+"The loop keeps running to the end, because nothing in it checks for cancellation.",
+"The task throws `CancellationError` at the next line.",
+"The task is suspended and can be resumed later."
+],
+"a": 1,
+"exp": [
+"Cancellation in Swift is **cooperative**: `cancel()` only sets a flag. Code has to check `Task.isCancelled`, call `try Task.checkCancellation()`, or await a cancellation-aware API (such as `Task.sleep` or URLSession's async methods) that throws `CancellationError`.",
+"Fix: call `try Task.checkCancellation()` at the top of each iteration."
+],
+"why": [
+"Swift never pre-empts or kills a task.",
+null,
+"Only explicit checks and cancellation-aware APIs throw; plain synchronous code doesn't.",
+"Cancellation isn't suspension; there's nothing to resume."
+],
+"id": "q10"
+},
+{
+"ch": 4,
+"topic": "Retain cycles",
+"q": "A user opens and closes the player screen 10 times. What happens to the `PlayerModel` instances?",
+"code": "final class PlayerModel {\n    private var timer: Timer?\n\n    func start() {\n        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in\n            self.tick()\n        }\n    }\n    deinit { timer?.invalidate() }\n    func tick() { }\n}",
+"opts": [
+"They're freed when the screen closes, and `deinit` invalidates each timer.",
+"They're freed, but the timers keep firing with `self == nil`.",
+"Only the most recent instance stays alive.",
+"All 10 stay alive and keep ticking. The run loop retains each timer, each timer's closure retains `self`, so `deinit` never runs."
+],
+"a": 3,
+"exp": [
+"The run loop retains a scheduled timer, the timer retains its closure, and the closure strongly captures `self`. That chain keeps `PlayerModel` alive, so the `deinit` that would invalidate the timer is never reached. It's a leak that also burns CPU.",
+"Fix: capture `[weak self]` in the closure **and** invalidate explicitly when the screen stops (for example in `onDisappear`), instead of relying on `deinit`."
+],
+"why": [
+"`deinit` can't run while something still holds a strong reference to the object.",
+"`self` is captured strongly, so it can never become nil.",
+"Each timer keeps its own instance alive independently.",
+null
+],
+"id": "q11"
+},
+{
+"ch": 4,
+"topic": "weak vs unowned",
+"q": "What happens when you access an `unowned` reference after the object it points to has been deallocated?",
+"code": null,
+"opts": [
+"The program traps (crashes) deterministically.",
+"It returns `nil`, like `weak` does.",
+"It silently reads garbage memory.",
+"ARC keeps the object alive until the `unowned` reference goes away."
+],
+"a": 0,
+"exp": [
+"Safe `unowned` references are checked. Swift keeps the object's memory around until the unowned count drops to zero, and any access after `deinit` **traps**. The bug is loud rather than undefined.",
+"Use `unowned` only when the referenced object is guaranteed to outlive the reference (for example, a child that can't exist without its parent). Otherwise, especially in escaping async callbacks, use `weak`."
+],
+"why": [
+null,
+"Only `weak` becomes nil, which is why it must be an optional `var`.",
+"That's `unowned(unsafe)`, which skips the check.",
+"`unowned` doesn't retain the object; that's the whole point of it."
+],
+"id": "q12"
+},
+{
+"ch": 5,
+"topic": "Dispatch",
+"q": "What does this print?",
+"code": "protocol Greeter { func greet() -> String }\nextension Greeter {\n    func greet() -> String { \"Hello\" }\n    func farewell() -> String { \"Bye\" }\n}\nstruct Swede: Greeter {\n    func greet() -> String { \"Hej\" }\n    func farewell() -> String { \"Hej då\" }\n}\nlet g: any Greeter = Swede()\nprint(g.greet(), g.farewell())",
+"opts": [
+"`Hej Hej då`",
+"`Hello Bye`",
+"`Hej Bye`",
+"`Hello Hej då`"
+],
+"a": 2,
+"exp": [
+"`greet()` is a **protocol requirement**, so the call goes through the witness table and finds `Swede`'s implementation: `Hej`.",
+"`farewell()` only exists in the extension, so it isn't a requirement. The call is **statically dispatched** on the static type, `any Greeter`, which picks the extension version: `Bye`. Declaring `farewell()` in the protocol would make it print `Hej då`."
+],
+"why": [
+"You'd get that when calling on `let g: Swede`, or if `farewell` were a requirement.",
+"Requirements dispatch dynamically to the conforming type.",
+null,
+"It's the other way round: requirements are dynamic, extension-only methods are static."
+],
+"id": "q13"
+},
+{
+"ch": 5,
+"topic": "some vs any",
+"q": "Which statement about `some Shape` and `any Shape` is correct?",
+"code": null,
+"opts": [
+"`some Shape` is one concrete type fixed at compile time and hidden from the caller, so the compiler can specialise it. `any Shape` is an existential box that can hold different types at runtime, with dynamic dispatch and possibly a heap allocation.",
+"They're interchangeable; `any` is just the newer spelling.",
+"`any Shape` is faster because it avoids generics.",
+"An array `[some Shape]` can mix circles and squares."
+],
+"a": 0,
+"exp": [
+"An **opaque type** (`some`) has one underlying type, chosen by the implementation for return types, or by the caller for parameters (where it's shorthand for a generic). The compiler knows that type, so it can specialise and inline.",
+"An **existential** (`any`) is a box: a small inline buffer, or a heap allocation for large values, plus a witness table. It's needed for mixed collections like `[any Shape]`, but costs dynamic dispatch. Default to `some` or generics; reach for `any` when you genuinely need different types together."
+],
+"why": [
+null,
+"They have different meanings and different performance.",
+"Usually the opposite: existentials block specialisation.",
+"All elements of `[some Shape]` must share one concrete type; mixing them needs `[any Shape]`."
+],
+"id": "q14"
+},
+{
+"ch": 5,
+"topic": "Copy-on-write",
+"q": "When is the array's storage actually copied?",
+"code": "var a = [1, 2, 3]\nvar b = a          // (1)\nprint(b.count)     // (2)\nb.append(4)        // (3)",
+"opts": [
+"At (1), the assignment.",
+"At (2), the first read.",
+"At (3), the first mutation while the buffer is shared.",
+"Never; `a` and `b` share the storage forever."
+],
+"a": 2,
+"exp": [
+"Arrays use **copy-on-write**: assignment only shares a reference to the same buffer. Before mutating, `append` checks whether the buffer is uniquely referenced. It's shared with `a`, so it's copied first, then the element is appended.",
+"Your own structs don't get copy-on-write automatically. When copies are expensive, wrap class-based storage and check `isKnownUniquelyReferenced` yourself before mutating."
+],
+"why": [
+"That would make every assignment O(n); copy-on-write postpones the copy.",
+"Reads never copy.",
+null,
+"Then mutating `b` would change `a`, which would break value semantics."
+],
+"id": "q15"
+},
+{
+"ch": 6,
+"topic": "Modelling state",
+"q": "Why do many senior engineers model a screen's state as an enum (B) rather than separate properties (A)?",
+"code": "// A\nvar isLoading = false\nvar error: Error?\nvar orders: [Order] = []\n\n// B\nenum State { case idle, loading, loaded([Order]), failed(Error) }\nvar state: State = .idle",
+"opts": [
+"Enums are faster for SwiftUI to diff.",
+"`@Observable` doesn't support optional properties.",
+"Enum values can't be mutated, so they're thread-safe.",
+"It makes impossible combinations unrepresentable (such as loading, failed and showing stale orders all at once), and `switch` forces every case to be handled."
+],
+"a": 3,
+"exp": [
+"With independent flags, `isLoading == true && error != nil` can happen, and eventually someone ships it. An enum encodes only the valid states, and the compiler's exhaustive `switch` makes the view handle each one: spinner, list, error, empty.",
+"It's also easier to test: assert one value instead of several flags."
+],
+"why": [
+"Performance isn't the reason; the gain is correctness.",
+"`@Observable` tracks optionals fine.",
+"You replace `state` like any other value. Thread safety comes from isolation, not from using an enum.",
+null
+],
+"id": "q16"
+},
+{
+"ch": 7,
+"topic": "NavigationStack",
+"q": "`path` holds 3 routes. The user taps the back button. What happens to `path`?",
+"code": "@State private var path: [Route] = []\n\nNavigationStack(path: $path) {\n    HomeView()\n        .navigationDestination(for: Route.self) { route in\n            RouteView(route: route)\n        }\n}",
+"opts": [
+"Nothing; `path` only changes when your code changes it.",
+"SwiftUI clears the whole path and returns to the root.",
+"SwiftUI removes the last element through the binding, so `path.count` becomes 2.",
+"SwiftUI appends a back marker to the path."
+],
+"a": 2,
+"exp": [
+"The binding is **two-way**. Your code pushes and pops by changing `path`, and SwiftUI writes user actions back: back and swipe-back remove the last element; tapping `NavigationLink(value:)` appends one.",
+"So the screen stack always equals the root plus one screen per element of `path`, which turns deep links, pop-to-root (`path.removeAll()`) and state restoration into simple data operations."
+],
+"why": [
+"Then the screen and your state would disagree, which is exactly what the binding prevents.",
+"Back pops only one level.",
+null,
+"There's no such marker; the element is simply removed."
+],
+"id": "q17"
+},
+{
+"ch": 8,
+"topic": "Performance",
+"q": "Every keystroke in the search field re-evaluates this whole screen's `body` and re-runs the filter. What's the most effective first fix?",
+"code": "struct Screen: View {\n    @State private var query = \"\"\n    let data: Analytics\n\n    var body: some View {\n        TextField(\"Search\", text: $query)\n        HeavyChart(data: data)\n        Results(items: data.items.filter { $0.matches(query) })\n    }\n}",
+"opts": [
+"Move `query` and the filtering into a small `SearchSection` subview that owns that state, so keystrokes only invalidate that subview.",
+"Wrap `HeavyChart` in `AnyView`.",
+"Add `.drawingGroup()` to the whole screen.",
+"Replace `@State` with a `static var`."
+],
+"a": 0,
+"exp": [
+"Invalidation follows dependencies: whichever view owns and reads `query` re-evaluates. Moving the state and the work derived from it into a small subview shrinks what gets invalidated; `Screen`'s `body` no longer depends on `query` at all.",
+"Then measure: `Self._printChanges()` to confirm, and the SwiftUI template in Instruments on a Release build to check that body counts and hitches drop. For large data, precompute or debounce the filter in a model rather than running it in `body`."
+],
+"why": [
+null,
+"`AnyView` removes type information and makes diffing harder, not easier.",
+"`drawingGroup` helps render complex vector content; it doesn't stop `body` from running.",
+"A static var isn't observed, so the UI would stop updating."
+],
+"id": "q18"
+},
+{
+"ch": 9,
+"topic": "Layout",
+"q": "How do these two lines differ?",
+"code": "Text(\"Hi\").padding().background(.orange)   // 1\nText(\"Hi\").background(.orange).padding()   // 2",
+"opts": [
+"No difference; SwiftUI reorders modifiers.",
+"In 1, orange sits only behind the text. In 2, orange includes the padding.",
+"In 1, orange fills the text plus its padding. In 2, orange sits tightly behind the text, with transparent padding around it.",
+"Line 2 doesn't compile, because `padding` must come before `background`."
+],
+"a": 2,
+"exp": [
+"Each modifier wraps the view before it in a new view. In 1, `padding` creates a bigger view and `background` sizes itself to that. In 2, `background` matches the text's own size, and `padding` then adds empty space outside it.",
+"The same reasoning explains why the position of `.frame()` or `.border()` changes the result. Read modifier chains from the inside out."
+],
+"why": [
+"The order has meaning; nothing gets reordered.",
+"That's the reverse.",
+null,
+"Both orders compile."
+],
+"id": "q19"
+},
+{
+"ch": 10,
+"topic": "Swift Testing",
+"q": "`Cart` is a class. Can these two tests interfere with each other?",
+"code": "@Suite struct CartTests {\n    let cart = Cart()\n\n    @Test func addsItem() {\n        cart.add(.apple)\n        #expect(cart.count == 1)\n    }\n\n    @Test func startsEmpty() {\n        #expect(cart.count == 0)\n    }\n}",
+"opts": [
+"Yes: `cart` is shared, so `startsEmpty` fails if `addsItem` runs first.",
+"Only when the tests run in parallel.",
+"No, because Swift Testing runs tests in the order they're declared.",
+"No: Swift Testing creates a fresh `CartTests` instance for each test, so stored properties and `init` act as per-test setup."
+],
+"a": 3,
+"exp": [
+"Each `@Test` in a suite runs on **its own instance** of the suite type. Stored properties and `init` replace XCTest's `setUp`, and `deinit` (in a class-based suite) replaces `tearDown`. One test can't see another test's changes to `cart`.",
+"That's what makes the default **parallel** execution safe. Global state (singletons, files, `UserDefaults`) can still leak between tests: inject dependencies, or mark a suite `.serialized` when it truly must run one test at a time."
+],
+"why": [
+"Each test gets its own `cart`.",
+"Isolation is per instance, whether the tests run in parallel or not.",
+"Swift Testing runs tests in parallel by default and doesn't guarantee any order.",
+null
+],
+"id": "q20"
+}
+]</script>
+<script>
+// ---- Quiz ----
+(function(){
+  const QUIZ = JSON.parse(document.getElementById("quiz-data").textContent);
+  const KEY = "swiftui-top10-quiz-v1";
+  const LETTERS = "ABCD";
+  const CH = ["", "View Identity & Lifetime", "State & Data Flow", "Swift Concurrency", "Memory & ARC",
+              "Value Types, Protocols & Generics", "App Architecture", "Navigation", "Performance",
+              "Layout & Animation", "Testing"];
+  const pad = n => String(n).padStart(2, "0");
+  const esc = SwiftHL.esc;
+  const md = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+
+  let answers = {};
+  try { answers = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { answers = {}; }
+  let filter = "all";
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(answers)); } catch {} };
+  const isOk = item => answers[item.id] === item.a;
+
+  const list = document.getElementById("quiz-list");
+  const cards = {};
+
+  QUIZ.forEach((item, i) => {
+    const li = document.createElement("li");
+    li.className = "q"; li.id = item.id;
+    li.innerHTML = `
+      <div class="qn">${pad(i + 1)}</div>
+      <div class="qb">
+        <div class="qtag"><a href="#t${item.ch}">Ch. ${pad(item.ch)}</a> · ${esc(item.topic)}</div>
+        <h3>${md(item.q)}</h3>
+        <div class="qcode"></div>
+        <div class="opts" role="group" aria-label="Answers"></div>
+        <div class="qexp" aria-live="polite"></div>
+      </div>`;
+    if (item.code) li.querySelector(".qcode").append(SwiftHL.figure(item.code, "Question " + (i + 1)));
+    const opts = li.querySelector(".opts");
+    item.opts.forEach((text, k) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "opt";
+      b.innerHTML = `<span class="L">${LETTERS[k]}</span><span>${md(text)}</span>`;
+      b.addEventListener("click", () => choose(item, k));
+      opts.append(b);
+    });
+    list.append(li);
+    cards[item.id] = li;
+    paint(item);
+  });
+
+  function choose(item, k){
+    if (answers[item.id] != null) return;
+    answers[item.id] = k; save();
+    paint(item); refresh();
+  }
+
+  function retry(item){
+    delete answers[item.id]; save();
+    paint(item); refresh();
+    cards[item.id].querySelector(".opt")?.focus({ preventScroll: true });
+  }
+
+  function paint(item){
+    const li = cards[item.id];
+    const chosen = answers[item.id];
+    const answered = chosen != null;
+    li.classList.toggle("is-ok", answered && chosen === item.a);
+    li.classList.toggle("is-bad", answered && chosen !== item.a);
+    li.querySelectorAll(".opt").forEach((b, k) => {
+      b.disabled = answered;
+      b.classList.toggle("correct", answered && k === item.a);
+      b.classList.toggle("wrong", answered && k === chosen && k !== item.a);
+      b.classList.toggle("dim", answered && k !== item.a && k !== chosen);
+    });
+    const box = li.querySelector(".qexp");
+    if (!answered) { box.innerHTML = ""; return; }
+    const ok = chosen === item.a;
+    const others = item.why.map((w, k) => w && k !== item.a ? `<li><b>${LETTERS[k]}</b>${md(w)}</li>` : "").join("");
+    box.innerHTML = `
+      <div class="explain ${ok ? "" : "bad"}">
+        <div class="verdict">${ok ? "✓ Correct" : `✗ Not quite. You chose ${LETTERS[chosen]}; the answer is ${LETTERS[item.a]}`}</div>
+        ${item.exp.map(p => `<p>${md(p)}</p>`).join("")}
+        <h5>Why the other options are wrong</h5>
+        <ul>${others}</ul>
+        <div class="xact">
+          <a href="#t${item.ch}">Read chapter ${pad(item.ch)}: ${esc(CH[item.ch])} →</a>
+          <button type="button">↺ Answer again</button>
+        </div>
+      </div>`;
+    box.querySelector(".xact button").addEventListener("click", () => retry(item));
+  }
+
+  function refresh(){
+    const answered = QUIZ.filter(it => answers[it.id] != null);
+    const correct = answered.filter(isOk).length;
+    const wrong = answered.length - correct;
+    document.getElementById("qscore").innerHTML = `${correct}<small>correct of 20</small>`;
+    document.getElementById("qmeter-ok").style.width = (correct / QUIZ.length * 100) + "%";
+    document.getElementById("qmeter-bad").style.width = (wrong / QUIZ.length * 100) + "%";
+    document.getElementById("qstats").textContent = answered.length
+      ? `Answered ${answered.length}/20 · ${wrong} wrong · ${Math.round(correct / answered.length * 100)}%`
+      : "No answers yet";
+
+    let shown = 0;
+    QUIZ.forEach(it => {
+      const a = answers[it.id];
+      const visible = filter === "all" || (filter === "open" && a == null) || (filter === "wrong" && a != null && a !== it.a);
+      cards[it.id].hidden = !visible;
+      if (visible) shown++;
+    });
+    const empty = document.getElementById("quiz-empty");
+    empty.hidden = shown > 0;
+    empty.textContent = filter === "wrong" ? "No wrong answers. Nice." : "Every question has been answered.";
+
+    const summary = document.getElementById("quiz-summary");
+    if (answered.length < QUIZ.length) { summary.hidden = true; return; }
+    const weak = [...new Set(QUIZ.filter(it => !isOk(it)).map(it => it.ch))].sort((x, y) => x - y);
+    const verdict = correct === 20 ? "Flawless. You know the machinery, not just the API."
+      : correct >= 17 ? "Interview-ready. Polish the few gaps below."
+      : correct >= 12 ? "Solid foundation. Review the chapters below before your next loop."
+      : "Worth a focused pass through the guide. Start with the chapters below.";
+    summary.hidden = false;
+    summary.innerHTML = `
+      <div class="big">${correct}<span>/20</span></div>
+      <h4>${verdict}</h4>
+      ${weak.length ? `<p>Chapters to review, based on the questions you missed:</p>
+        <div class="review">${weak.map(c => `<a href="#t${c}">${pad(c)} · ${esc(CH[c])}</a>`).join("")}</div>` : ""}
+      ${wrong ? `<button type="button" class="qbtn" data-act="retry-wrong">Retry the ${wrong} wrong answer${wrong > 1 ? "s" : ""}</button>` : ""}
+      <button type="button" class="qbtn" data-act="reset">Start over</button>`;
+    summary.querySelector('[data-act="retry-wrong"]')?.addEventListener("click", () => {
+      QUIZ.forEach(it => { if (!isOk(it)) delete answers[it.id]; });
+      save(); QUIZ.forEach(paint); setFilter("open");
+      document.getElementById("quiz-list").scrollIntoView({ behavior: "smooth" });
+    });
+    summary.querySelector('[data-act="reset"]').addEventListener("click", resetAll);
+  }
+
+  function setFilter(f){
+    filter = f;
+    document.querySelectorAll(".qfilters .qbtn").forEach(b => b.classList.toggle("on", b.dataset.filter === f));
+    refresh();
+  }
+
+  function resetAll(){
+    if (!confirm("Clear all 20 answers?")) return;
+    answers = {}; save(); QUIZ.forEach(paint); setFilter("all");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  document.querySelectorAll(".qfilters .qbtn").forEach(b => b.addEventListener("click", () => setFilter(b.dataset.filter)));
+  document.getElementById("qreset").addEventListener("click", resetAll);
+  refresh();
+})();
+
+// ---- View router: #quiz / #qN show the quiz, everything else the guide ----
+(function(){
+  const guide = document.getElementById("view-guide");
+  const quiz = document.getElementById("view-quiz");
+  const tabs = document.querySelectorAll(".viewtabs a");
+  let current = null;
+  function route(){
+    const h = location.hash;
+    const showQuiz = h === "#quiz" || /^#q\d+$/.test(h);
+    const view = showQuiz ? "quiz" : "guide";
+    const switched = view !== current;
+    current = view;
+    guide.hidden = showQuiz;
+    quiz.hidden = !showQuiz;
+    tabs.forEach(a => a.classList.toggle("on", a.dataset.view === view));
+    const target = h && h !== "#quiz" && h !== "#guide" ? document.getElementById(h.slice(1)) : null;
+    requestAnimationFrame(() => {
+      if (target) target.scrollIntoView({ behavior: switched ? "auto" : "smooth" });
+      else if (switched || h === "#quiz" || h === "#guide") window.scrollTo(0, 0);
+      dispatchEvent(new Event("scroll"));
+    });
+  }
+  addEventListener("hashchange", route);
+  route();
+})();
 </script>
 </body>
 </html>

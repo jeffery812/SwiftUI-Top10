@@ -19,6 +19,9 @@ struct ContentView: View {
             Tab("Nested", systemImage: "eye") {
                 NestedObservationDemo()
             }
+            Tab("Init", systemImage: "hammer") {
+                StateInitDemo()
+            }
         }
     }
 }
